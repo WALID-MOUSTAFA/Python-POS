@@ -1,0 +1,9 @@
+	 {%if form_error %}
+			<div class="alert alert-danger alert-dismissible ">
+				<ul>
+					{%for k, v in form_error.items%}
+					<li> <strong> {{k}} </strong> : {{v.0.message}} </li> 
+					{%endfor%}
+				</ul>
+			</div>
+			{%endif%}

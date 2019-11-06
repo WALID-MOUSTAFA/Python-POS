@@ -1,0 +1,138 @@
+{%extends "partials/main-layout.html"%}
+
+{%block content%}
+
+<div class="container p-1 edit-user-container " style="padding: 1px">
+	<div class="row ng-scope">
+		<div class="col-md-4">
+			<div class="card">
+				<div class="card-body text-center">
+					<div class="pv-lg"><img class="center-block img-responsive img-circle img-thumbnail thumb96" src="/media/{{user.avatar}}" alt="Contact"></div>
+					<p class="m0 h3 text-bold">{{user.fullname}}</p>
+					<p class="h6">{{user.username}}</p>
+					<p> role : {{user.role.name}}</p>
+					<div class="mv-lg">
+						
+					</div>
+					<a href="/admins/delete/{{user.id}}"> <button {%if not 'delete_admin' in request.session.permissions %} disabled {%endif%}class="btn btn-danger "><i class="far fa-trash-alt"></i> Delete user</button></a>
+
+				</div>
+			</div>
+			
+		</div>
+		<div class="col-md-8">
+			
+			<div class="card card-primary">
+				<div class="card-header">
+					<div class="h4 text-center">Edit information</div>
+				</div>
+				<div class="card-body">
+
+					
+					{%include "partials/form_error.html"%}
+
+					<div class="row pv-lg">
+						<div class="col-lg-2"></div>
+						<div class="col-lg-8">
+							<form role="form" method="POST" action="" enctype="multipart/form-data">
+								{%csrf_token%}
+								
+	 							
+
+								<div class="form-group">
+									<label for="username">Username</label>
+									<input type="text" class="form-control" id="username" name="username" placeholder="Enter username" value="{{user.username}}">
+								</div>
+
+								<div class="form-group">
+									<label for="full-username">Fullname</label>
+									<input type="text" class="form-control" id="fullname" name="fullname" placeholder="Enter fullname" value={{user.fullname}}>
+								</div>
+								
+								<div class="form-group">
+									<label for="username">Email</label>
+									<input type="email" class="form-control" id="email" name="email" placeholder="Enter a valid email" value="{{user.email}}">
+								</div>
+
+									
+								<div class="form-group">
+									<label for="password">Old password</label>
+									<input type="password" class="form-control" name="old_password" id="password" placeholder="old password">
+								</div>
+
+								
+								<div class="form-group">
+									<label for="password">Password</label>
+									<input type="password" class="form-control" name="password" id="password" placeholder="Password">
+								</div>
+
+								
+								<div class="form-group">
+									<label for="confirm-password">Password</label>
+									<input name="confirm_password" type="password" class="form-control" id="confirm-password" placeholder="confirm Password">
+								</div>
+
+								<div class="form-group">
+									<label>Custom Select</label>
+									<select name="roles" class="custom-select">
+										{%for i in roles%}
+										{%if i.name == user.role.name %}
+
+										<option selected>{{i.name}}</option>
+										
+										
+										{%else%}
+										<option>{{i.name}}</option>
+
+										{%endif%}
+										
+										{%endfor%}
+									</select>
+								</div>
+
+								<div class="form-group">
+									{%for i in permissions%}
+
+									<div class="custom-control custom-checkbox">
+										
+										{%if i.name in user_permission_array %}
+
+										<input checked name= "permissions[]" class="custom-control-input" type="checkbox" id="ch{{i.id}}bx" value="{{i.id}}">
+
+										{%else%}
+
+										<input  name = "permissions[]" class="custom-control-input" type="checkbox" id="ch{{i.id}}bx" value="{{i.id}}">
+
+										{%endif%}
+										
+										<label for="ch{{i.id}}bx" class="custom-control-label">{{i.name}}</label>
+
+									</div>
+									
+									{%endfor%}
+								</div>
+
+								
+								<div class="form-group">
+									<label for="avatar">Profile Picture</label>
+									<div class="input-group">
+										<div class="custom-file">
+											<input type="file" name= "avatar" class="custom-file-input" id="avatar">
+											<label class="custom-file-label" for="exampleInputFile">Choose file</label>
+										</div>
+									</div> 
+								</div>
+
+
+								<div class="card-footer">
+									<button type="submit" class="btn btn-primary">Submit</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{%endblock content%}

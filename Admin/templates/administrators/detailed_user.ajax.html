@@ -1,0 +1,42 @@
+<div>
+	<div>
+		<p class="h4 text-capitalize">username: </p>
+		<p class="pl-5">{{user.username}}</p>
+	</div>
+
+	<div>
+		<p class="h4 text-capitalize">fullname: </p>
+		<p class="pl-5">{{user.fullname}}</p>
+	</div>
+
+	<div>
+		<p class="h4 text-capitalize">email: </p>
+		<p class="pl-5">{{user.email}}</p>
+	</div>
+
+	<div>
+		<p class="h4 text-capitalize">fullname: </p>
+		<p class="pl-5">{{user.fullname}}</p>
+	</div>
+
+
+	<div>
+		<p class="h4 text-capitalize">register date: </p>
+		<p class="pl-5">{{user.register_date}}</p>
+	</div>
+
+	<div>
+		<p class="h4 text-capitalize">permissions: </p>
+		<ul class="pl-5 list-group">
+			{%for p in user.permission.all%}
+			<li class="list-group-item">{{p.name}}</li>
+			{%endfor%}
+		</ul>
+	</div>
+	
+	<div style="width: 300px">
+		<p class="h4 text-capitalize">profile picture: </p>
+		<img class="pl-5 w-100 thumbnail" src="/media/{{user.avatar}}"/> 
+	</div>
+	
+</div>
