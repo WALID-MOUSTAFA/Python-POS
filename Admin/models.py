@@ -1,6 +1,4 @@
 from django.db import models
-
-
         
 class Role (models.Model):
     id   = models.BigAutoField(primary_key = True)
@@ -44,3 +42,42 @@ class Admin (models.Model):
         
 
   
+
+        
+class Category(models.Model):
+    id = models.BigAutoField(primary_key = True)
+    desc_image = models.TextField(null = True)
+    
+    class Meta:
+        db_table = "categories"
+
+
+
+# class Category_en(models.Model):
+#     id = models.BigAutoField(primary_key = True)
+#     name = models.TextField()
+#     desc = models.TextField()   
+#     category = models.ForeignKey(Category, on_delete = models.CASCADE)
+    
+#     class Meta:
+#         db_table = "categories_en"
+
+# class Category_ar(models.Model):
+#     id = models.BigAutoField(primary_key = True)
+#     name = models.TextField()
+#     desc = models.TextField()
+#     category = models.ForeignKey(Category, on_delete = models.CASCADE)
+    
+#     class Meta:
+#         db_table = "categories_ar"
+
+
+class Category_translation(models.Model):
+    id = models.BigAutoField(primary_key = True)
+    name = models.TextField()
+    desc = models.TextField()
+    Category = models.ForeignKey(Category, on_delete = models.CASCADE)
+    language = models.CharField(max_length = 255, default = "en")
+
+    class Meta:
+        db_table = "categories_translation"

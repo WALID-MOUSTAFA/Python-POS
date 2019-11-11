@@ -13,15 +13,40 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path
 from django.urls import include
 from Admin import urls as adminUrls
+from commons import urls as commonsUrls
 from django.conf.urls.static import static
 from django.conf import settings
+from django.conf.urls.i18n import i18n_patterns
+from django.utils.translation import gettext_lazy as _ 
+
+
+def index(request):
+    from django.http import HttpResponse
+  
+    return HttpResponse("<h1> <a href='/admin/'> Admin</a> </h1>")
 
 urlpatterns = [
-    path('djangoadmin/', admin.site.urls),
-    path("", include(adminUrls) )
-]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+   
 
+]
+
+urlpatterns += i18n_patterns(
+
+    path("", index),
+    path('djangoadmin/', admin.site.urls),
+    path("admin", include(adminUrls) ),
+    path("commons/", include(commonsUrls)),
+
+)+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [
+        path(r"^__debug__", include(debug_toolbar.urls))
+    ]

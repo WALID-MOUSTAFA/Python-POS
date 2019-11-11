@@ -24,7 +24,7 @@ def is_allowed(user_id, *permissions):
     except ObjectDoesNotExist:
 
         print(f"\nuser not found\n")
-        return redirect("admins")
+        return redirect("/admin/")
 
 
     

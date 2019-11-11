@@ -12,9 +12,9 @@ class CheckAuth:
     
     def process_view(self, request, view_func, view_args, view_kwargs):
 
-        if view_func.__name__.endswith("admin") or view_func.__name__.endswith("admins"):
+        if (view_func.__name__.endswith("admin") or view_func.__name__.endswith("admins")) and not view_func.__name__.startswith('login') :
             if not  is_loged_in(request):
-                return redirect("/admins/login")
+                return redirect("/admin/login")
             
         if view_func.__name__ == "edit_admin":            
             if not is_allowed(request.session.get("user_id"), "edit_admin") :

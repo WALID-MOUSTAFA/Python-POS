@@ -1,0 +1,103 @@
+{%extends "partials/main-layout.html" %}
+{%load i18n%}
+{%block content%}
+
+
+
+	<div class="container p-1" id="all_users" style="">
+		<div class="mt-5 card">
+			<div class="card-body table-responsive">
+
+				<div class="mb-5">
+					<a href="/admin/category/add"> <button class="btn btn-primary"><i class="fa fa-plus"> </i> {%trans "add"%}</button></a>
+					
+				</div>
+				
+				<table id="" class="table text-center" style="overflow:hidden">
+					<thead class="bg-primary">
+						<tr>
+							<th>{%trans "category name in english"%}</th>
+							<th>{%trans "category description in english"%}</th>
+							<th>{%trans "category name in arabic"%}</th>
+							<th>{%trans "category description in arabic"%}</th>
+							<th>{%trans "description image"%}</th>
+							<th>{%trans "actions"%}</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						{%for c in categories%}
+							<tr>
+								{%for c_en in categories_en%}
+									{%if c_en.Category.id == c.id%}
+										<td>{{c_en.name}}</td>
+										<td>{{c_en.desc}}</td>
+									{%endif%}
+								{%endfor%}
+								
+								{%for c_ar in categories_ar%}
+									{%if c_ar.Category.id == c.id%}
+										<td>{{c_ar.name}}</td>
+										<td>{{c_ar.desc}}</td>
+									{%endif%}
+								{%endfor%}
+								
+								<td><img style="width:100px" src="/media/{{c.desc_image}}"/></td>
+								
+								<td>			
+									<a href="/admin/category/{{c.id}}">
+										<button
+											{%if not "show_admin" in request.session.permissions%} disabled {%endif%}
+											data-user_id="{{u.id}}"
+											class="btn btn-primary user_show">
+											<i class="fa fa-eye"></i>
+										</button>
+									</a>
+
+									<a href="/admin/category/edit/{{c.id}}">
+										<button
+											{%if not "edit_admin" in request.session.permissions%} disabled {%endif%}
+											class="btn btn-info ">
+											<i class="fas fa-edit"></i>
+										</button>
+									</a>
+
+									<a href="/admin/category/delete/{{c.id}}">
+										<button
+											{%if not "delete_admin" in request.session.permissions%} disabled {%endif%}
+											class="btn btn-danger ">
+											<i class="far fa-trash-alt"></i>
+										</button>
+									</a>
+								</td>
+
+								
+							</tr>
+						{%endfor%} <!--end main cat -->
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+
+	<div id="show_user_modal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+
+				<div class="modal-header bg-primary">
+					<div class="modal-title">User Info</div>
+				</div>
+
+				<div class="modal-body">				
+				</div>
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary">Save changes</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{%endblock content%}

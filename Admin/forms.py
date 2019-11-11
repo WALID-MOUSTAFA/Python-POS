@@ -1,8 +1,10 @@
 from django import forms
-
+from django.utils.translation import ugettext_lazy
 
 class CreateAdminForm(forms.Form):
-    username = forms.CharField(min_length =3)
+
+
+    username = forms.CharField(min_length =3, label = "da")
     fullname = forms.CharField()
     password = forms.CharField()
     confirm_password   = forms.CharField()
@@ -10,7 +12,6 @@ class CreateAdminForm(forms.Form):
     roles     = forms.CharField()
     permissions  = forms.CheckboxInput()
     avatar     = forms.FileField()
-    
 
     def clean(self):
         cleaned_data = super(CreateAdminForm, self).clean()
@@ -19,6 +20,7 @@ class CreateAdminForm(forms.Form):
 
         if password != confirm_password:
             self.add_error("confirm_password", "password and confirm password fields are not identical")
+
 
             
 class UpdateAdminForm(CreateAdminForm):
@@ -46,4 +48,20 @@ class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField()
 
+    
+
+class CreateCategoryForm(forms.Form):
+    name = forms.CharField(min_length =3)
+    desc = forms.CharField()
+    desc_image = forms.FileField()
+    name_ar = forms.CharField()
+    desc_ar = forms.CharField()
+    
+    
+
+    
+
+class UpdateCategoryForm(CreateCategoryForm):
+    desc_image = forms.FileField(required = False)
+    
     

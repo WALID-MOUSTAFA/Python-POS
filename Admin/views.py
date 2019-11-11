@@ -14,25 +14,31 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from .helpers import is_allowed, is_loged_in
 
-def main(request):
+
+def index_admin(request):
     
+    # from .locale.ar import lang as _
+    # return HttpResponse(_["name"])
     return render(request,"index.html");
 
 
 
 
-def login(request):
+def login_admin(request):
     
     if request.method == "GET":
         if is_loged_in(request):
-            return redirect("/admins/")
+            return redirect("/admin/")
         else:
             return render(request, "login.html")
 
  
     elif request.method == "POST":
+        
         login_form = LoginForm(request.POST)
 
+        print("\n \n dsadas \n\n")
+        
         if not login_form.is_valid():
 
             context = {"form_error": json.loads(login_form.errors.as_json())}
@@ -49,7 +55,9 @@ def login(request):
                 request.session["username"] = user.username
 
                 request.session["user_id"]  = user.id
-
+                
+                request.session["user_avatar"]  = user.avatar
+                
                 user_permission_array = []
 
                 for i in user.permission.all():
@@ -57,17 +65,19 @@ def login(request):
 
                 request.session["permissions"] = user_permission_array
                     
-                return redirect("/admins/")
+                return redirect("/admin/")
+            
             except  ObjectDoesNotExist:
-                return render(request, "login.html", {"error": "Error, either username or password is worong, try again! "})
+                
+                return render(request, "login.html", {"error": "Error, either username or password is wrong, try again! "})
                 
 
             
             
         
-def logout(request):
+def logout_admin(request):
     request.session.flush()
-    return redirect("/admins/login/")
+    return redirect("/admin/login")
             
 
 
@@ -95,6 +105,7 @@ def create_admin(request):
         
         if not  createAdminForm.is_valid():
             context["form_error"] = json.loads(createAdminForm.errors.as_json())
+            context["form"] = createAdminForm
             return render(request, "administrators/create.html", context)
 
         else:
@@ -128,7 +139,7 @@ def create_admin(request):
                     dest.write(i)
 
             messages.success(request, f"user {user.username} created successfully")
-            return redirect("/admins/")
+            return redirect("/admin/")
 
 
 
@@ -212,7 +223,7 @@ def edit_admin(request, id):
                         dest.write(i)
 
             messages.success(request, f"user {user.username} updated successfully")
-            return redirect("/admins/")
+            return redirect("/admin/all")
 
 
 
@@ -221,7 +232,7 @@ def detailed_admin(request, id):
     if request.method == "GET":
         
         db_user = Admin.objects.prefetch_related('permission').get(id= id)
-        return render(request, "administrators/detailed_user.ajax.html", {"user": db_user} )
+        return render(request, "administrators/detailed_user.html", {"user": db_user} )
   
 
 
@@ -233,11 +244,11 @@ def delete_admin(request, id):
     user = Admin.objects.get(id = id)
     if user.delete():
         messages.success(request,f"user \"{user.username}\" has deleted successfully.")
-        return redirect("/admins")
+        return redirect("/admin")
     else:
        
         messages.error(request, "Error! can't delete user")
-        return redirect("/admins")
+        return redirect("/admin")
 
     
         

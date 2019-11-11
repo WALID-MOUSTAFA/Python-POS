@@ -1,0 +1,187 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-09 10:57+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: ecommerce/settings.py:124
+msgid "German"
+msgstr ""
+
+msgid "arabic"
+msgstr "اللغة العربية"
+
+msgid "english"
+msgstr "اللغة الإنجليزية"
+
+
+msgid "language"
+msgstr "اللغة"
+
+
+
+msgid "administrators"
+msgstr "المسئولين"
+
+
+msgid "Sign in"
+msgstr "تسجيل الدخول"
+
+msgid "sign in"
+msgstr "دخول"
+
+
+
+msgid "username"
+msgstr "اسم المستخدم"
+
+msgid "fullname"
+msgstr "الاسم الكامل"
+
+msgid "email"
+msgstr "البريد الإلكتروني"
+
+
+msgid "avatar"
+msgstr "الصورة الشخصية"
+
+
+msgid "create user"
+msgstr "إضافة مستخدم جديد"
+
+
+msgid "role"
+msgstr "المنصب"
+
+
+msgid "roles"
+msgstr "المناصب"
+
+
+
+msgid "actions"
+msgstr "خيارات"
+
+
+msgid "edit"
+msgstr "تعديل"
+
+
+msgid "edit user"
+msgstr "تعديل بيانات المستخدم"
+
+
+msgid "password"
+msgstr "كلمة المرور"
+
+
+msgid "confirm password"
+msgstr "تأكيد كلمة المرور"
+
+
+msgid "user info"
+msgstr "معلومات عن المستخدم"
+
+
+
+msgid "show all"
+msgstr "عرض الكل"
+
+
+msgid "categories"
+msgstr "الفئات"
+
+
+msgid "add"
+msgstr "إضافة"
+
+
+msgid "delete"
+msgstr "حذف"
+
+msgid "description"
+msgstr "الوصف"
+
+msgid "name"
+msgstr "الاسم"
+
+msgid "description image"
+msgstr "الصورة الوصفية	"
+
+
+msgid "browse"
+msgstr "تصفح"
+
+
+msgid "create new category"
+msgstr "إضافة فئة جديدة"
+
+
+msgid "category name"
+msgstr "اسم الفئة"
+
+msgid "category info"
+msgstr "معلومات عن الفئة"
+
+msgid "create category"
+msgstr "إضافة فئة جديدة"
+
+
+msgid "edit category"
+msgstr "تعديل الفئة"
+
+
+
+msgid "category description"
+msgstr "وصف الفئة"
+
+
+msgid "choose image"
+msgstr "اختر صورة"
+
+
+msgid "home"
+msgstr "الرئيسية"
+
+
+msgid "logout"
+msgstr "تسجيل الخروج"
+
+msgid "category name in arabic"
+msgstr "اسم الفئة بالعربي"
+
+msgid "category name in english"
+msgstr "اسم الفئة بالإنجليزي"
+
+msgid "category description in arabic"
+msgstr "وصف الفئة بالعربي"
+
+
+msgid "category description in english"
+msgstr "وصف الفئة بالإنجليزي"
+
+
+msgid "category added successfully"
+msgstr "تم إضافة الفئة بنجاح"
+
+
+
+#: ecommerce/settings.py:125
+msgid "Arabic"
+msgstr ""
+

@@ -1,0 +1,41 @@
+{%extends "partials/main-layout.html"%}
+{%load i18n%}
+{%block content%}
+
+<div class="container  p-1 edit-user-container " style="padding: 1px">
+
+	<div class="card card-primary">
+		<div class="card-header text-center">
+			{%trans "category info"%}
+		</div>
+		<div class="card-body">
+			<div class="ml-auto avatar w-100">
+				<div class="float-right">
+					<a href="/admin/category/edit/{{category.id}}"> <button class="btn btn-primary"><i class="fa fa-edit"> </i> {%trans "edit"%}</button></a>
+					<a href="/admin/category/delete/{{category.id.id}}">	<button class="btn btn-danger"><i class="fa fa-trash-alt"> </i> {%trans "delete"%}</button></a>
+				</div>
+				
+				<div class="clearfix"></div>
+
+				<img class="d-block m-auto img-circle" src="/media/{{category.desc_image}}" alt="" />
+
+				<table class="mt-5 table text-center">
+
+					<tr><td>{%trans "category name in english"%} : </td> <td>{{category_en.name}}</td></tr>
+					<tr><td>{%trans "category description in english"%}</td> <td>{{category_en.desc}}</td></tr>
+					
+					<tr><td>{%trans "category name in arabic"%} : </td> <td>{{category_ar.name}}</td></tr>
+					<tr><td>{%trans "category description in arabic"%}</td> <td>{{category_ar.desc}}</td></tr>
+
+					
+				</table>
+				
+		
+				
+			</div>
+		</div>
+		
+	</div>
+	
+</div>
+{%endblock content%}

@@ -1,19 +1,25 @@
 {%extends "partials/main-layout.html"%}
-
+{%load i18n %}
 {%block content%}
 
 
 <div class="container p-1" id="all_users" style="">
 	<div class="mt-5 card">
 		<div class="card-body table-responsive">
+
+				<div class="mb-5">
+					<a href="/admin/create"> <button class="btn btn-primary"><i class="fa fa-plus"> </i> {%trans "add"%}</button></a>
+		
+				</div>
+
 			<table id="" class="table" style="overflow:hidden">
 				<thead class="bg-primary">
 					<tr>
-						<th>username</th>
-						<th>fullname</th>
-						<th>email</th>
-						<th>avatar</th>
-						<th>Actions</th>
+						<th>{%trans "username"%}</th>
+						<th>{% trans "fullname" %}</th>
+						<th>{%trans "email"%}</th>
+						<th>{%trans "avatar"%}</th>
+						<th>{%trans "actions"%}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -22,17 +28,19 @@
 						<td>{{u.username}}</td>
 						<td>{{u.fullname}}</td>
 						<td>{{u.email}}</td>
-						<td>{{u.avatar}}</td>
+						<td><div> <img style="width: 200px" class=" img-responsive img-thumbnail"alt="" src="/media/{{u.avatar}}"/></div></td>
 						<td>
-							
-							<button
-								{%if not "show_admin" in request.session.permissions%} disabled {%endif%}
-								data-user_id="{{u.id}}"
-								class="btn btn-primary user_show">
-								<i class="fa fa-eye"></i>
-							</button>
 
-							<a href="/admins/edit/{{u.id}}">
+							<a href="/admin/{{u.id}}">
+								<button
+									{%if not "show_admin" in request.session.permissions%} disabled {%endif%}
+									data-user_id="{{u.id}}"
+									class="btn btn-primary user_show">
+									<i class="fa fa-eye"></i>
+								</button>
+							</a>
+							
+							<a href="/admin/edit/{{u.id}}">
 								<button
 									{%if not "edit_admin" in request.session.permissions%} disabled {%endif%}
 									class="btn btn-info ">
@@ -40,7 +48,7 @@
 								</button>
 							</a>
 
-							<a href="/admins/delete/{{u.id}}">
+							<a href="/admin/delete/{{u.id}}">
 								<button
 									{%if not "delete_admin" in request.session.permissions%} disabled {%endif%}
 									class="btn btn-danger ">

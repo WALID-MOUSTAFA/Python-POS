@@ -14,17 +14,31 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from .  import views 
+from django.urls import path, include
+from . import views 
+from . import category_views as c_v
+
+
+categories_urlpatterns = [
+    path("/all/", c_v.index_category),
+    path("/add/", c_v.create_category),
+    path("/edit/<int:id>/", c_v.edit_category),
+    path("/<int:id>", c_v.detailed_category),
+    path("/delete/<int:id>", c_v.delete_category)
+
+]
+
 
 urlpatterns = [
-    path("", views.main),
-    path("admins/login/", views.login),
-    path("admins/logout/", views.logout),
-    path("admins/", views.all_admins),
-    path("admins/create/", views.create_admin),
-    path("admins/edit/<int:id>", views.edit_admin),
-    path("admins/<int:id>", views.detailed_admin),
-    path("admins/delete/<int:id>", views.delete_admin)
+    path("/", views.index_admin),
+    path("/login/", views.login_admin),
+    path("/logout/", views.logout_admin),
+    path("/all/", views.all_admins),
+    path("/create/", views.create_admin),
+    path("/edit/<int:id>", views.edit_admin),
+    path("/<int:id>", views.detailed_admin),
+    path("/delete/<int:id>", views.delete_admin),
+
+    path("/category", include(categories_urlpatterns))
     
 ]

@@ -1,4 +1,4 @@
-{%load static%}
+{%load static i18n%}
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 	<!-- Brand Logo -->
@@ -13,10 +13,10 @@
 		<!-- Sidebar user panel (optional) -->
 		<div class="user-panel mt-3 pb-3 mb-3 d-flex">
 			<div class="image">
-				<img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
+				<img src="/media/{{request.session.user_avatar}}" class="img-circle elevation-2" alt="User Image">
 			</div>
 			<div class="info">
-				<a href="#" class="d-block">Alexander Pierce</a>
+				<a href="#" class="d-block">{{request.session.username}}</a>
 			</div>
 		</div>
 
@@ -24,35 +24,98 @@
 		<nav class="mt-2">
 			<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 				<!--  icons to the links using the .nav-icon class -->
-				<li class="nav-item has-treeview menu-open">
-					<a href="#" class="nav-link active">
+
+				<!-- start administrations -->
+				<li class="nav-item has-treeview ">
+					<a href="#" class="nav-link">
 						<i class="nav-icon fas fa-users"></i>
 						<p>
-							Administration
+							{%trans "administrators"%}
 							<I class="right fas fa-angle-left"></i>
 						</p>
 					</a>
 
 					<ul class="nav nav-treeview">
 						<li class="nav-item">
-							<a href="/admins" class="nav-link ">
-								<i class="fas fa-book nav-icon"></i>
-								<p>Show all</p>
+							<a href="/admin/all" class="nav-link ">
+								<i class="nav-icon fas fa-external-link-alt"></i>
+								<p>{%trans "show all"%}</p>
 							</a>
 						</li>
 
 						<li class="nav-item">
-							<a href="/admins/create" class="nav-link">
+							<a href="/admin/create" class="nav-link">
 								<i class="fas fa-plus nav-icon"></i>
-								<p>Add</p>
+								<p>{%trans "add"%}</p>
 							</a>
 						</li>
 						
+					</ul>
+				</li>
+				<!-- end administrations -->
+
 				
+				<!-- start categories -->
+				<li class="nav-item has-treeview ">
+					<a href="#" class="nav-link ">
+						<i class="nav-icon fas fa-list"></i>
+						<p>
+							{%trans "categories"%}
+							<I class="right fas fa-angle-left"></i>
+						</p>
+					</a>
+
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="/admin/category/all" class="nav-link ">
+								<i class="nav-icon fa fa-external-link-alt"></i>
+								<p>{%trans "show all"%}</p>
+							</a>
+						</li>
+
+						<li class="nav-item">
+							<a href="/admin/category/add" class="nav-link">
+								<i class="fas fa-plus nav-icon"></i>
+								<p>{%trans "add"%}</p>
+							</a>
+						</li>
 						
 					</ul>
-				
 				</li>
+				<!-- end categories -->
+
+				<!-- start languages -->
+				<li class="nav-item has-treeview ">
+					<a href="#" class="nav-link ">
+						<i class="nav-icon fa fa-globe"></i>
+						<p>
+							{%trans 'language'%}
+							<I class="right fas fa-angle-left"></i>
+						</p>
+					</a>
+
+					
+					<ul class="nav nav-treeview">
+						
+						<li class="nav-item">
+							<a href="/commons/lang/ar" class="nav-link ">
+								<i class="nav-icon fa fa-circle text-primary"></i>
+								<p >{%trans "arabic"%}</p>
+							</a>
+						</li>
+
+						<li class="nav-item">
+							<a href="/commons/lang/en" class="nav-link">
+								<i class="fas fa-circle nav-icon text-primary"></i>
+								<p > {%trans "english"%}</p>
+							</a>
+						</li>
+						
+					</ul>
+				</li>
+				<!-- end languages -->
+				
+				
 			</ul>
 		</nav>
 		<!-- /.sidebar-menu -->
