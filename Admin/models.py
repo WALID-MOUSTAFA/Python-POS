@@ -53,25 +53,6 @@ class Category(models.Model):
 
 
 
-# class Category_en(models.Model):
-#     id = models.BigAutoField(primary_key = True)
-#     name = models.TextField()
-#     desc = models.TextField()   
-#     category = models.ForeignKey(Category, on_delete = models.CASCADE)
-    
-#     class Meta:
-#         db_table = "categories_en"
-
-# class Category_ar(models.Model):
-#     id = models.BigAutoField(primary_key = True)
-#     name = models.TextField()
-#     desc = models.TextField()
-#     category = models.ForeignKey(Category, on_delete = models.CASCADE)
-    
-#     class Meta:
-#         db_table = "categories_ar"
-
-
 class Category_translation(models.Model):
     id = models.BigAutoField(primary_key = True)
     name = models.TextField()
@@ -80,4 +61,35 @@ class Category_translation(models.Model):
     language = models.CharField(max_length = 255, default = "en")
 
     class Meta:
-        db_table = "categories_translation"
+        db_table = "category_translation"
+
+
+
+class Product(models.Model):
+    id = models.BigAutoField(primary_key = True)
+    category = models.ForeignKey(Category, on_delete = models.SET_NULL, null = True)
+    sell_price = models.TextField();
+    
+    class Meta:
+        db_table = "products"
+
+
+
+class Product_translation(models.Model):
+    id = models.BigAutoField(primary_key = True)
+    name = models.TextField()
+    desc = models.TextField()
+    language = models.CharField(max_length = 255, default = "en")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    
+    class Meta:
+        db_table = "product_translation"
+
+        
+class Product_images(models.Model):
+    id= models.BigAutoField(primary_key = True)
+    image  = models.TextField()
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "products_images"

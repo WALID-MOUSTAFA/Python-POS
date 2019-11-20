@@ -25,7 +25,6 @@ SECRET_KEY = '4^!12lcpoxpv!2m=qbnj5^(1+$7+b))or1j)x_ztj!v-9+z0!6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
 
@@ -147,6 +146,8 @@ SESSION_ENGINE = "django.contrib.sessions.backends.file"
 SESSION_FILE_PATH = os.path.join(BASE_DIR, "tmp")
 
 
-INTERNAL_IPS = ('127.0.0.1') #for debug toolbar 
+INTERNAL_IPS = ('127.0.0.1') #for debug toolbar
+APPEND_SLASH = True
+
 #########################################global debug###############################################################
 

@@ -30,9 +30,12 @@
 		<link rel="stylesheet" href="{% static 'plugins/summernote/summernote-bs4.css' %}">
 		<!-- Google Font: Source Sans Pro -->
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Cairo&display=swap" rel="stylesheet">
+
 
 
 		{%if request.LANGUAGE_CODE == "ar"%}
+		
 		<link rel="stylesheet" href="{% static 'dist_rtl/css/adminlte.min.css/' %}">
 		<link rel="stylesheet" href="{% static 'dist_rtl/css/bootstrap-rtl.min.css' %}">
 		<link rel="stylesheet" href="{% static 'dist_rtl/css/custom-style.css' %}">
@@ -42,6 +45,14 @@
 				position: initial;
 			}
 
+			.float-right{
+				float: left !important;
+			}
+			
+			.float-left{
+				float: right !important;
+			}
+			
 		</style>
 		
 		{%endif%}

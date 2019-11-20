@@ -7,11 +7,12 @@
 	<div class="mt-5 card">
 		<div class="card-body table-responsive">
 
-				<div class="mb-5">
-					<a href="/admin/create"> <button class="btn btn-primary"><i class="fa fa-plus"> </i> {%trans "add"%}</button></a>
-		
-				</div>
+			<div class="mb-5 float-right">
+				<a href="/admin/create"> <button class="btn btn-primary"><i class="fa fa-plus"> </i> {%trans "add"%}</button></a>
+			</div>
 
+			<div class="clearfix"></div>
+			
 			<table id="" class="table" style="overflow:hidden">
 				<thead class="bg-primary">
 					<tr>
@@ -48,13 +49,13 @@
 								</button>
 							</a>
 
-							<a href="/admin/delete/{{u.id}}">
-								<button
+							
+								<button data-id = {{u.id}}
 									{%if not "delete_admin" in request.session.permissions%} disabled {%endif%}
-									class="btn btn-danger ">
+									class="btn btn-danger delete_user ">
 									<i class="far fa-trash-alt"></i>
 								</button>
-							</a>
+							
 
 							
 						</td>

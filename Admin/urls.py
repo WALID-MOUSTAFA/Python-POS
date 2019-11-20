@@ -17,20 +17,33 @@ from django.contrib import admin
 from django.urls import path, include
 from . import views 
 from . import category_views as c_v
-
+from . import product_views  as p_v
 
 categories_urlpatterns = [
+    path("/", c_v.index_category),
     path("/all/", c_v.index_category),
     path("/add/", c_v.create_category),
     path("/edit/<int:id>/", c_v.edit_category),
-    path("/<int:id>", c_v.detailed_category),
+    path("/<int:id>/", c_v.detailed_category),
     path("/delete/<int:id>", c_v.delete_category)
 
 ]
 
 
+products_urlpatterns = [
+    path("/all/", p_v.index_product),
+    path("/", p_v.index_product),
+    path("/add/", p_v.create_product),
+    path("/edit/<int:id>/", p_v.edit_product),
+    path("/<int:id>", p_v.detailed_product),
+    path("/delete/<int:id>", p_v.delete_product),
+    path("/delete_product_images/", p_v.delete_product_images)
+    
+]
+
+
 urlpatterns = [
-    path("/", views.index_admin),
+    path("/", views.all_admins),
     path("/login/", views.login_admin),
     path("/logout/", views.logout_admin),
     path("/all/", views.all_admins),
@@ -39,6 +52,6 @@ urlpatterns = [
     path("/<int:id>", views.detailed_admin),
     path("/delete/<int:id>", views.delete_admin),
 
-    path("/category", include(categories_urlpatterns))
-    
+    path("/category", include(categories_urlpatterns)),
+    path("/product", include(products_urlpatterns))
 ]

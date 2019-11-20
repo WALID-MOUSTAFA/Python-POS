@@ -4,21 +4,24 @@
 
 <div class="container  p-1 edit-user-container " style="padding: 1px">
 
-	<div class="card card-primary">
-		<div class="card-header text-center">
-			{%trans "user info"%}
-		</div>
+	<div class="text-center mt-3 mb-3">
+		<p class="h3">{%trans "user info"%} </p>
+	</div>
+	
+	<div class="card">
+
 		<div class="card-body">
+			
 			<div class="ml-auto avatar w-100">
 				<div class="float-right">
 					<a href="/admin/edit/{{user.id}}"> <button class="btn btn-primary"><i class="fa fa-edit"> </i> {%trans "edit"%}</button></a>
-					<a href="/admin/delete/{{user.id}}">	<button class="btn btn-danger"><i class="fa fa-trash-alt"> </i> {%trans "delete"%}</button></a>
+					<button data-id= "{{user.id}}" class="btn btn-danger delete_user"><i class="fa fa-trash-alt"> </i> {%trans "delete"%}</button>
 				</div>
 				<div class="clearfix"></div>
 				<img style="Width: 400px" class="d-block m-auto img-thumbnail" src="/media/{{user.avatar}}" alt="" />
 				<p class="d-block h2 bold m-auto text-center">{{user.fullname}}</p>
 
-				<table class="mt-5 table text-center">
+				<table class="mt-5 table-secondary table-striped table text-center">
 
 					<tr><td>{%trans "username"%}</td> <td>{{user.username}}</td></tr>
 					<tr><td>{%trans "email"%}</td> <td>{{user.email}}</td></tr>

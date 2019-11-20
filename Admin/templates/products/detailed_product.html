@@ -1,0 +1,75 @@
+{%extends "partials/main-layout.html"%}
+{%load i18n%}
+{%block content%}
+
+<div class="container  p-1 edit-user-container " style="padding: 1px">
+
+	<div class="card detailed_product">
+		<!-- <div class="card-header text-center"> -->
+		<!-- 	{%trans "product info"%} -->
+		<!-- </div> -->
+		<div class="card-body">
+			<div class="ml-auto avatar w-100">
+
+				<div class="float-left">
+					
+					<button id="delete_selected_images"class="btn btn-danger"><i class="fa fa-trash-alt"> </i> {%trans "delete selected images"%}</button>
+				</div>
+					
+				<div class="float-right">
+					<a href="/admin/product/edit/{{product.id}}"> <button class="btn btn-primary"><i class="fa fa-edit"> </i> {%trans "edit"%}</button></a>
+					<button class="btn btn-danger delete_product" data-id = "{{product.id}}"><i class="fa fa-trash-alt" > </i> {%trans "delete"%}</button>
+				</div>
+				
+				<div class="clearfix"></div>
+
+				<div class = "mt-5 row">
+					{%for i in  images%}
+					<div class="col">
+						<img style="max-width:200px" class="detailed_product_image m-4 img-thumbnail" data-name="{{i.image}}" class="w-100" src="/media/{{i.image}}" alt="" />
+					</div>
+					
+					{%endfor%}
+				</div>
+				
+				<table class="mt-5 table table-secondary  table-striped table-bordered text-center">
+
+					<tr><td>{%trans "product name in english"%} : </td> <td>{{product_en.name}}</td></tr>
+					<tr><td>{%trans "product description in english"%}</td> <td>{{product_en.desc}}</td></tr>
+					
+					<tr><td>{%trans "product name in arabic"%} : </td> <td>{{product_ar.name}}</td></tr>
+					<tr><td>{%trans "product description in arabic"%}</td> <td>{{product_ar.desc}}</td></tr>
+
+					
+				</table>
+				
+		
+				
+			</div>
+		</div>
+		
+	</div>
+	
+
+<div style="z-index: 9999" id="confirm_delete_modal" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-danger">
+        <h5 class="modal-title text-center">{%trans "confirm delete"%}</h5>
+        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
+          <!-- <span aria-hidden="true">&times;</span> -->
+        </button>
+      </div>
+      <div class="modal-body">
+        <p class="h4 text-center text-secondary">{%trans "are you sure you want to delete those pictures?"%}</p>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-danger product_image_confirm_delete mr-1"><i class="fa fa-trash-alt"> </i> {%trans "delete"%}</button>
+          <button type="button" class="btn btn-secondary mr-1" data-dismiss="modal"><i class="fa fa-times"></i> {%trans "close"%}</button>
+      </div>
+    </div>
+  </div>
+</div>
+	
+</div>
+{%endblock content%}

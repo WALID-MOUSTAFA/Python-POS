@@ -240,15 +240,19 @@ def detailed_admin(request, id):
 
       
 def delete_admin(request, id):
+    
     context = {}
-    user = Admin.objects.get(id = id)
-    if user.delete():
-        messages.success(request,f"user \"{user.username}\" has deleted successfully.")
-        return redirect("/admin")
+    if request.method == "POST":
+        
+        user = Admin.objects.get(id = id)
+        if user.delete():
+            return JsonResponse({"success": True , "message": "product has been deleted successfully"})
+
+        else:
+            return JsonResponse({"success": False , "message": "can't delete this product"})
     else:
-       
-        messages.error(request, "Error! can't delete user")
-        return redirect("/admin")
+        return JsonResponse({"error": "wrong method"})
+
 
     
         

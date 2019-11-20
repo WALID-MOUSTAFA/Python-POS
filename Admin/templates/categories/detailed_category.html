@@ -4,15 +4,17 @@
 
 <div class="container  p-1 edit-user-container " style="padding: 1px">
 
+	<div class="text-center mt-4 mb-4">
+		<p class="h3">{%trans "category info"%}</p>
+	</div>
+
+	
 	<div class="card card-primary">
-		<div class="card-header text-center">
-			{%trans "category info"%}
-		</div>
 		<div class="card-body">
 			<div class="ml-auto avatar w-100">
 				<div class="float-right">
 					<a href="/admin/category/edit/{{category.id}}"> <button class="btn btn-primary"><i class="fa fa-edit"> </i> {%trans "edit"%}</button></a>
-					<a href="/admin/category/delete/{{category.id.id}}">	<button class="btn btn-danger"><i class="fa fa-trash-alt"> </i> {%trans "delete"%}</button></a>
+					<button data-id = "{{category.id}}"class="btn btn-danger delete_category"><i class="fa fa-trash-alt"> </i> {%trans "delete"%}</button>
 				</div>
 				
 				<div class="clearfix"></div>

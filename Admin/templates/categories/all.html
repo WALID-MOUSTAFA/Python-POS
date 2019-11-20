@@ -8,12 +8,13 @@
 		<div class="mt-5 card">
 			<div class="card-body table-responsive">
 
-				<div class="mb-5">
+				<div class="mb-5 float-right">
 					<a href="/admin/category/add"> <button class="btn btn-primary"><i class="fa fa-plus"> </i> {%trans "add"%}</button></a>
 					
 				</div>
-				
-				<table id="" class="table text-center" style="overflow:hidden">
+
+				<div class="clearfix"></div>
+				<table id="all_categories" class="table text-center" style="overflow:hidden">
 					<thead class="bg-primary">
 						<tr>
 							<th>{%trans "category name in english"%}</th>
@@ -27,6 +28,7 @@
 					<tbody>
 
 						{%for c in categories%}
+						
 							<tr>
 								{%for c_en in categories_en%}
 									{%if c_en.Category.id == c.id%}
@@ -62,10 +64,9 @@
 										</button>
 									</a>
 
-									<a href="/admin/category/delete/{{c.id}}">
-										<button
+										<button data-id="{{c.id}}"
 											{%if not "delete_admin" in request.session.permissions%} disabled {%endif%}
-											class="btn btn-danger ">
+											class="btn btn-danger delete_category ">
 											<i class="far fa-trash-alt"></i>
 										</button>
 									</a>

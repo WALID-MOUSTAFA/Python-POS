@@ -1,0 +1,111 @@
+{%extends "partials/main-layout.html" %}
+{%load i18n%}
+{%block content%}
+
+
+
+	<div class="container p-1" id="all_users" style="">
+		<div class="mt-5 card">
+			<div class="card-body table-responsive">
+
+				<div class="mb-5">
+					<a href="/admin/product/add"> <button class="btn btn-primary float-right"><i class="fa fa-plus"> </i> {%trans "add"%}</button></a>
+					
+				</div>
+				
+				<table id="all_products" class="table text-center" style="overflow:hidden">
+					<thead class="bg-primary">
+						<tr>
+							<th>{%trans "product name in english"%}</th>
+							<th>{%trans "product description in english"%}</th>
+							<th>{%trans "product name in arabic"%}</th>
+							<th>{%trans "product description in arabic"%}</th>
+							<th>{%trans "description images"%}</th>
+							<th>{%trans "actions"%}</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						{%for p in products %}
+						
+						<tr>
+							
+								{%for p_en in products_en%}
+									{%if p_en.product.id == p.id%}
+										<td>{{p_en.name}}</td>
+										<td>{{p_en.desc}}</td>
+									{%endif%}
+								{%endfor%}
+								
+								{%for p_ar in products_ar%}
+									{%if p_ar.product.id == p.id%}
+										<td>{{p_ar.name}}</td>
+										<td>{{p_ar.desc}}</td>
+									{%endif%}
+								{%endfor%}
+								
+								<!-- <td><img style="width:100px" src="/media/{{c.desc_image}}"/></td> -->
+								<td>
+									<div style="width:200px; height:100px" class="">
+
+									{%for i in images%}
+										{%if i.product.id == p.id%}
+										<img class=" d-inline img-responsive img-thumbnail" style="width:25%" src="/media/{{i.image}}" alt="" />
+										{%endif%}
+										{%endfor%}
+									</div>
+
+								</td>
+
+								<td>
+									<div class="row">
+
+
+										<div class="col-12 mb-1">
+									<a href="/admin/product/{{p.id}}">
+										 <button
+											 {%if not "show_admin" in request.session.permissions%} disabled {%endif%}
+											 data-user_id="{{u.id}}"
+											 class="btn btn-primary user_show">
+											 <i class="fa fa-eye"></i>
+											 show
+										 </button>
+									</a>
+									</div>
+										<div class="col-12 mb-1"> 
+										<a href="/admin/product/edit/{{p.id}}">
+											<button
+												{%if not "edit_admin" in request.session.permissions%} disabled {%endif%}
+												class="btn btn-info ">
+												<i class="fas fa-edit"></i>
+												{%trans "edit"%}
+											</button>
+										</a>
+										</div>
+
+										<div class="col-12 ">
+										
+											<button data-id ="{{p.id}}"
+												{%if not "delete_admin" in request.session.permissions%} disabled {%endif%}
+												class="btn btn-danger delete_product ">
+												<i class="far fa-trash-alt"></i>
+												{%trans "delete"%}
+											</button>
+									
+										</div>
+
+									</div>
+								</td>
+
+								
+						</tr>
+						{%endfor%} <!--end main prod -->
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+
+
+{%endblock content%}

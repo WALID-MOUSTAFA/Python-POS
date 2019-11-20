@@ -1,0 +1,107 @@
+{%extends "partials/main-layout.html"%}
+{%load i18n%}
+{%block content%}
+{% get_current_language as LANG %}
+
+<div class="form-wrapper container" style="width: 80%; padding: 1px">
+
+
+	
+	<div class="card  card-primary mt-5">
+		
+	
+		<div class="card-body">
+
+			<div class="float-right mb-3">
+				<a href="/admin/product/{{product.id}}"><button class="btn btn-primary"><i class="fa fa-edit"></i> {%trans "edit product images"%}</button></a>
+			</div>
+			<div class="clearfix"></div>
+			
+			{#%include "partials/form_error.html"%#}
+			<form role="form" method="POST" action="" enctype="multipart/form-data">
+				{%csrf_token%}
+				
+				<div class="form-group">
+					<label>{%trans "category"%}</label>
+					<select name="category" class="custom-select">
+						{%for i in categories%}
+
+						{%if i.language == LANG %}
+
+						{%if i.Category.id == product_category%}
+						<option selected>{{i.name}}</option>
+
+						{%else%}
+						<option>{{i.name}}</option>
+
+						{%endif%}
+						
+						{%endif%}
+						
+						{%endfor%}
+					</select>
+				</div>
+
+				
+				<div class="form-group">
+					<label for="name"> {% trans "product name in english"  %} : </label>
+					<p class="h5 text-danger">{{form.name.errors.as_text}}</p>
+					<input type="text" class="form-control" id="name" name="name" placeholder="" value="{{product_en.name}}">
+				</div>
+
+				
+				<div class="form-group">
+					<p class="h5 text-danger">{{form.name_ar.errors.as_text}}</p>
+
+					<label for="name"> {% trans "product name in arabic" %} : </label>
+					<input type="text" class="form-control" id="name" name="name_ar" placeholder="" value="{{product_ar.name}}"  >
+				</div>
+
+				
+				<div class="form-group">
+					<p class="h5 text-danger">{{form.desc.errors.as_text}}</p>
+
+					<label for="full-username">{%trans 'product description in english'%} : </label>
+					<textarea type="text" class="form-control" id="desc" name="desc" placeholder="">{{product_en.desc}}</textarea>
+				</div>
+				
+				<div class="form-group">
+					<p class="h5 text-danger">{{form.desc_ar.errors.as_text}}</p>
+
+					<label for="full-username">{%trans 'product description in arabic'%} : </label>
+					<textarea type="text" class="form-control" id="desc" name="desc_ar" placeholder="">{{product_ar.desc}}</textarea>
+				</div>
+
+				<div class="form-group">
+					<p class="h5 text-danger">{{form.sell_price.errors.as_text}}</p>
+
+					<label for="name"> {% trans "sells price" %} : </label>
+					<input type="text" class="form-control" id="name" name="sell_price" placeholder="" value="{{product.sell_price}}"  >
+				</div>
+
+
+				
+				<div class="form-group">
+
+					<label for="desc_images">{%trans "description images"%}</label>
+					<p class="h5 text-danger">{{form.desc_images.errors.as_text}}</p>
+
+					<div class="input-group">
+						<div class="custom-file">
+							<input multiple type="file" name= "desc_images" class="custom-file-input" id="desc_images">
+							<label class="custom-file-label" for="exampleInputFile">{%trans "choose image"%}</label>
+						</div>
+					</div> 
+				</div>
+
+
+					<button type="submit" class="btn btn-primary float-right"> <i class="fa fa-edit"> </i> {%trans "edit"%}</button>
+				
+				<div class="clearfix"></div>
+			</form>
+
+			
+		</div>
+	</div>
+</div>
+{%endblock content%}

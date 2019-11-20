@@ -40,13 +40,13 @@ urlpatterns += i18n_patterns(
     path("", index),
     path('djangoadmin/', admin.site.urls),
     path("admin", include(adminUrls) ),
-    path("commons/", include(commonsUrls)),
+    path("commons", include(commonsUrls)),
 
-)+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    prefix_default_language=True)+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns += [
-        path(r"^__debug__", include(debug_toolbar.urls))
+        path("__debug__", include(debug_toolbar.urls))
     ]

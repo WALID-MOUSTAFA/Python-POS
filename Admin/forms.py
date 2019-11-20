@@ -56,12 +56,24 @@ class CreateCategoryForm(forms.Form):
     desc_image = forms.FileField()
     name_ar = forms.CharField()
     desc_ar = forms.CharField()
-    
-    
-
-    
+        
 
 class UpdateCategoryForm(CreateCategoryForm):
     desc_image = forms.FileField(required = False)
     
+    
+
+class CreateProductForm(forms.Form):
+    name = forms.CharField(min_length =3)
+    desc = forms.CharField()
+    name_ar = forms.CharField()
+    desc_ar = forms.CharField()
+    sell_price = forms.CharField()
+    category = forms.CharField()
+    desc_images = forms.FileField()
+
+
+class UpdateProductForm(CreateProductForm):
+    desc_images = forms.FileField(required = False)
+
     

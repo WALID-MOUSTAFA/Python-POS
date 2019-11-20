@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import CreateCategoryForm, UpdateCategoryForm
@@ -73,7 +73,7 @@ def create_category(request):
                 
             
             messages.success(request, _("category added successfully"))
-            return render(request, "categories/all.html", context)
+            return redirect("/admin/category/")
     
 
 
@@ -144,12 +144,14 @@ def detailed_category(request, id):
 
 def delete_category(request, id):
     context = {}
-    category = Category.objects.get(id = id)
-    if category.delete():
-        messages.success(request,f"category \"{category.name}\" has deleted successfully.")
-        return redirect("/admin/category/all")
-    else:
-       
-        messages.error(request, "Error! can't delete category")
-        return redirect("/admin/category/all")
 
+    if request.method == "POST":
+        
+        category = Category.objects.get(id = id)
+
+        if category.delete():
+            return JsonResponse({"success": True , "message": "category has been deleted successfully"})
+        else:           
+            return JsonResponse({"success": False , "message": "can't delete this category"})
+    else:
+        return JsonResponse({"error": "wrong method"})
