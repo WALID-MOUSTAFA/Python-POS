@@ -7,7 +7,7 @@ import json
 import os
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
-
+import uuid
 
 def index_category(request):
     categories = list(Category.objects.all())
@@ -49,9 +49,11 @@ def create_category(request):
         else:
             #parent category
             category = Category()
-            category.desc_image = request.FILES.get("desc_image").name
-            category.save()            
-            with open(upload_url + "/" + request.FILES.get("desc_image").name, "wb+") as dest:
+            desc_image = str(uuid.uuid4()) + '.' + request.FILES.get("desc_image").name.split(".")[-1]
+            category.desc_image = desc_image
+            category.save()
+            
+            with open(upload_url + "/" + desc_image, "wb+") as dest:
                 for i in request.FILES.get("desc_image").chunks():
                     dest.write(i)
 
@@ -110,14 +112,21 @@ def edit_category(request, id):
             
 
             if request.FILES.get("desc_image") != None:
-                category.desc_image = request.FILES.get("desc_image").name
+                old_image = category.desc_image
+                if os.path.exists(settings.MEDIA_ROOT + "/" + old_image):
+                    os.remove(settings.MEDIA_ROOT + "/" + old_image)
+
+                desc_image = str(uuid.uuid4()) + '.' + request.FILES.get("desc_image").name.split(".")[-1]
+
+                category.desc_image = desc_image
                 upload_url = settings.MEDIA_ROOT 
-                with open(upload_url + "/" + request.FILES.get("desc_image").name, "wb+") as dest:
+                with open(upload_url + "/" + desc_image, "wb+") as dest:
                     for i in request.FILES.get("desc_image").chunks():
                         dest.write(i)
-                
+
+                        
             category.save()
-            messages.success(request, "Edited record successfully")
+            messages.success(request, _("category has been edited successfully"))
             return redirect("/admin/category/all")
 
             

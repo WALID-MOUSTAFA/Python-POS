@@ -1,6 +1,11 @@
 {%extends "partials/main-layout.html" %}
-{%load i18n%}
+{%load i18n users_extras%}
 {%block content%}
+
+{%user_allowed "edit_category" as allow_edit_category%}
+{%user_allowed "delete_category" as allow_delete_category%}
+{%user_allowed "create_category" as allow_create_category%}
+{%user_allowed "show_category" as allow_show_category%}
 
 
 
@@ -9,13 +14,16 @@
 			<div class="card-body table-responsive">
 
 				<div class="mb-5 float-right">
-					<a href="/admin/category/add"> <button class="btn btn-primary"><i class="fa fa-plus"> </i> {%trans "add"%}</button></a>
+					<a href="/admin/category/add">
+						<button {%if not allow_edit_category%} disabled {%endif%} class="btn btn-primary">
+							<i class="fa fa-plus"> </i> {%trans "add"%}</button>
+					</a>
 					
 				</div>
 
 				<div class="clearfix"></div>
 				<table id="all_categories" class="table text-center" style="overflow:hidden">
-					<thead class="bg-primary">
+					<thead class="bg-info">
 						<tr>
 							<th>{%trans "category name in english"%}</th>
 							<th>{%trans "category description in english"%}</th>
@@ -33,14 +41,14 @@
 								{%for c_en in categories_en%}
 									{%if c_en.Category.id == c.id%}
 										<td>{{c_en.name}}</td>
-										<td>{{c_en.desc}}</td>
+										<td>{{c_en.desc|stringformat:".50s ..." }}</td>
 									{%endif%}
 								{%endfor%}
 								
 								{%for c_ar in categories_ar%}
 									{%if c_ar.Category.id == c.id%}
 										<td>{{c_ar.name}}</td>
-										<td>{{c_ar.desc}}</td>
+										<td>{{c_ar.desc|stringformat:".50s ..." }}</td>
 									{%endif%}
 								{%endfor%}
 								
@@ -57,15 +65,15 @@
 									</a>
 
 									<a href="/admin/category/edit/{{c.id}}">
-										<button
-											{%if not "edit_admin" in request.session.permissions%} disabled {%endif%}
+										<button	{%if not allow_edit_category%} disabled {%endif%}
+
 											class="btn btn-info ">
 											<i class="fas fa-edit"></i>
 										</button>
 									</a>
 
-										<button data-id="{{c.id}}"
-											{%if not "delete_admin" in request.session.permissions%} disabled {%endif%}
+									<button data-id="{{c.id}}"
+											{%if not allow_delete_category%} disabled {%endif%}
 											class="btn btn-danger delete_category ">
 											<i class="far fa-trash-alt"></i>
 										</button>

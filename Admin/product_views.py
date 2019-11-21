@@ -1,5 +1,6 @@
 import os
 import json
+import uuid
 from django.http import JsonResponse, HttpResponseServerError
 from django.shortcuts import render, HttpResponse, redirect
 from django.utils.translation import gettext as _
@@ -15,13 +16,14 @@ from django.contrib import messages
 def index_product(request):
     products_en =  Product_translation.objects.filter(language = "en")
     products_ar =  Product_translation.objects.filter(language = "ar")
-    products    = Product.objects.all()
+    products    = Product.objects.prefetch_related("category").all()
     images      = Product_images.objects.all()
     context = {
         "products": products,
+        "category_translation": Category_translation.objects.all(),
         "products_en": products_en,
         "products_ar" : products_ar,
-        "images"     : images
+        "images"     : images,
     }
     return render(request, "products/all.html", context)
 
@@ -71,8 +73,9 @@ def create_product(request):
             images = request.FILES.getlist("desc_images")
             
             for i in images:
-                Product_images.objects.create(image = i.name, product = product)
-                with open(settings.MEDIA_ROOT + "/" + i.name, "wb+") as dest:
+                desc_image = str(uuid.uuid4()) + "." + i.name.split(".")[-1]
+                Product_images.objects.create(image = desc_image, product = product)
+                with open(settings.MEDIA_ROOT + "/" + desc_image, "wb+") as dest:
                     for j in i.chunks():
                         dest.write(j)
                     dest.close()
@@ -94,7 +97,7 @@ def edit_product(request, id):
         "product": product,
         "product_ar": product_ar,
         "product_en":  product_en,
-        "product_category": product.category.id,
+        "product_category": product.category.id if product.category is not None else None,
         "categories": Category_translation.objects.all()
     }
     if request.method == "GET":
@@ -127,8 +130,9 @@ def edit_product(request, id):
                 images = request.FILES.getlist("desc_images")
             
                 for i in images:
-                    Product_images.objects.create(image = i.name, product = product)
-                    with open(settings.MEDIA_ROOT + "/" + i.name, "wb+") as dest:
+                    desc_image = str(uuid.uuid4()) + "." + i.name.split(".")[-1]
+                    Product_images.objects.create(image = desc_image, product = product)
+                    with open(settings.MEDIA_ROOT + "/" + desc_image, "wb+") as dest:
                         for j in i.chunks():
                             dest.write(j)
                         dest.close()

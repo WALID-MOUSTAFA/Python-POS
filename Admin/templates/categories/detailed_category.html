@@ -1,6 +1,11 @@
 {%extends "partials/main-layout.html"%}
-{%load i18n%}
+{%load i18n users_extras%}
 {%block content%}
+
+{%user_allowed "edit_category" as allow_edit_category%}
+{%user_allowed "delete_category" as allow_delete_category%}
+{%user_allowed "create_category" as allow_create_category%}
+{%user_allowed "show_category" as allow_show_category%}
 
 <div class="container  p-1 edit-user-container " style="padding: 1px">
 
@@ -13,15 +18,26 @@
 		<div class="card-body">
 			<div class="ml-auto avatar w-100">
 				<div class="float-right">
-					<a href="/admin/category/edit/{{category.id}}"> <button class="btn btn-primary"><i class="fa fa-edit"> </i> {%trans "edit"%}</button></a>
-					<button data-id = "{{category.id}}"class="btn btn-danger delete_category"><i class="fa fa-trash-alt"> </i> {%trans "delete"%}</button>
+
+					<a href="/admin/category/edit/{{category.id}}">
+						<button {%if not allow_edit_category%} disabled {%endif%} class="btn btn-primary">
+							<i class="fa fa-edit"> </i> {%trans "edit"%}
+						</button>
+					</a>
+
+					<button
+						{%if not allow_delete_category%} disabled {%endif%}
+						data-id = "{{category.id}}"class="btn btn-danger delete_category">
+						<i class="fa fa-trash-alt"> </i> {%trans "delete"%}
+					</button>
 				</div>
 				
 				<div class="clearfix"></div>
 
-				<img class="d-block m-auto img-circle" src="/media/{{category.desc_image}}" alt="" />
-
-				<table class="mt-5 table text-center">
+				<div class="mt-5">
+				<img class="d-block m-auto img-responsive w-100" src="/media/{{category.desc_image}}" alt="" />
+				</div>
+				<table class="mt-5 table table-secondary table-striped text-center">
 
 					<tr><td>{%trans "category name in english"%} : </td> <td>{{category_en.name}}</td></tr>
 					<tr><td>{%trans "category description in english"%}</td> <td>{{category_en.desc}}</td></tr>

@@ -2,7 +2,7 @@ from .models import Admin
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
 
-def is_allowed(user_id, *permissions):
+def is_allowed(user_id, *args):
 
     try:
         user = Admin.objects.prefetch_related("permission").get(id = user_id)
@@ -13,7 +13,7 @@ def is_allowed(user_id, *permissions):
 
             user_permission_array.append(i.name)
         
-        for i in permissions:   
+        for i in args:   
 
             if not i in user_permission_array:
                 

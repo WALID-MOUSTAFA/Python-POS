@@ -1,6 +1,11 @@
 {%extends "partials/main-layout.html"%}
-{%load i18n%}
+{%load i18n users_extras%}
 {%block content%}
+
+{%user_allowed "edit_category" as allow_edit_category%}
+{%user_allowed "delete_category" as allow_delete_category%}
+{%user_allowed "create_category" as allow_create_category%}
+{%user_allowed "show_category" as allow_show_category%}
 
 
 <div class="form-wrapper container" style="width: 80%; padding: 1px">

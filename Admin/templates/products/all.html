@@ -1,6 +1,13 @@
 {%extends "partials/main-layout.html" %}
-{%load i18n%}
+{%load i18n users_extras%}
 {%block content%}
+
+{%user_allowed "edit_product" as allow_edit_product%}
+{%user_allowed "delete_product" as allow_delete_product%}
+{%user_allowed "create_product" as allow_create_product%}
+{%user_allowed "read_product" as allow_show_product%}
+
+{%get_current_language as LANG%}
 
 
 
@@ -9,8 +16,12 @@
 			<div class="card-body table-responsive">
 
 				<div class="mb-5">
-					<a href="/admin/product/add"> <button class="btn btn-primary float-right"><i class="fa fa-plus"> </i> {%trans "add"%}</button></a>
-					
+					<a href="/admin/product/add">
+						<button {%if not allow_create_product%} disabled {%endif%}
+								class="btn btn-primary float-right"><i class="fa fa-plus">
+							</i> {%trans "add"%}
+						</button>
+					</a>
 				</div>
 				
 				<table id="all_products" class="table text-center" style="overflow:hidden">
@@ -20,6 +31,7 @@
 							<th>{%trans "product description in english"%}</th>
 							<th>{%trans "product name in arabic"%}</th>
 							<th>{%trans "product description in arabic"%}</th>
+							<th>{%trans "category" %} </th>
 							<th>{%trans "description images"%}</th>
 							<th>{%trans "actions"%}</th>
 						</tr>
@@ -44,7 +56,16 @@
 									{%endif%}
 								{%endfor%}
 								
-								<!-- <td><img style="width:100px" src="/media/{{c.desc_image}}"/></td> -->
+								
+								<td>
+									{%for c_trans in category_translation %}
+									{%if c_trans.Category.id == p.category.id and c_trans.language == LANG%}
+									{{c_trans.name}}
+									{%endif%}
+									{%endfor%}
+							
+								</td>
+
 								<td>
 									<div style="width:200px; height:100px" class="">
 
@@ -75,7 +96,8 @@
 										<div class="col-12 mb-1"> 
 										<a href="/admin/product/edit/{{p.id}}">
 											<button
-												{%if not "edit_admin" in request.session.permissions%} disabled {%endif%}
+												{%if not allow_edit_product%} disabled {%endif%}
+
 												class="btn btn-info ">
 												<i class="fas fa-edit"></i>
 												{%trans "edit"%}
@@ -86,7 +108,7 @@
 										<div class="col-12 ">
 										
 											<button data-id ="{{p.id}}"
-												{%if not "delete_admin" in request.session.permissions%} disabled {%endif%}
+													{%if not allow_delete_product%} disabled {%endif%}
 												class="btn btn-danger delete_product ">
 												<i class="far fa-trash-alt"></i>
 												{%trans "delete"%}

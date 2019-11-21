@@ -13,6 +13,8 @@ class Role (models.Model):
 class Permission (models.Model):
     id   = models.BigAutoField(primary_key = True)
     name = models.TextField(null = True)
+    name_en = models.TextField(null = True)
+    name_ar = models.TextField(null = True)
     desc = models.TextField(null = True)
     
 

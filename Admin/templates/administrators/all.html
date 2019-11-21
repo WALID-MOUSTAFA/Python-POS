@@ -1,6 +1,11 @@
 {%extends "partials/main-layout.html"%}
-{%load i18n %}
+{%load i18n users_extras %}
 {%block content%}
+
+{%user_allowed "edit_admin" as allow_edit_admin%}
+{%user_allowed "delete_admin" as allow_delete_admin%}
+{%user_allowed "create_admin" as allow_create_admin%}
+{%user_allowed "show_admin" as allow_show_admin%}
 
 
 <div class="container p-1" id="all_users" style="">
@@ -8,7 +13,7 @@
 		<div class="card-body table-responsive">
 
 			<div class="mb-5 float-right">
-				<a href="/admin/create"> <button class="btn btn-primary"><i class="fa fa-plus"> </i> {%trans "add"%}</button></a>
+				<a href="/admin/create"> <button {%if not allow_create_admin%} disabled{%endif%} class="btn btn-primary"><i class="fa fa-plus"> </i> {%trans "add"%}</button></a>
 			</div>
 
 			<div class="clearfix"></div>
@@ -34,7 +39,6 @@
 
 							<a href="/admin/{{u.id}}">
 								<button
-									{%if not "show_admin" in request.session.permissions%} disabled {%endif%}
 									data-user_id="{{u.id}}"
 									class="btn btn-primary user_show">
 									<i class="fa fa-eye"></i>
@@ -43,7 +47,9 @@
 							
 							<a href="/admin/edit/{{u.id}}">
 								<button
-									{%if not "edit_admin" in request.session.permissions%} disabled {%endif%}
+									
+									{%if not allow_edit_admin%} disabled {%endif%}
+
 									class="btn btn-info ">
 									<i class="fas fa-edit"></i>
 								</button>
@@ -51,7 +57,8 @@
 
 							
 								<button data-id = {{u.id}}
-									{%if not "delete_admin" in request.session.permissions%} disabled {%endif%}
+										{%if not allow_delete_admin%} disabled {%endif%}
+
 									class="btn btn-danger delete_user ">
 									<i class="far fa-trash-alt"></i>
 								</button>

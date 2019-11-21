@@ -162,6 +162,11 @@ msgstr "وصف الفئة بالإنجليزي"
 msgid "category added successfully"
 msgstr "تم إضافة الفئة بنجاح"
 
+msgid "category has been edited successfully"
+msgstr "تم تعديل الفئة بنجاح"
+
+
+
 ######################products#################################
 
 msgid "product"

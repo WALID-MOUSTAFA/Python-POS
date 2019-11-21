@@ -1,11 +1,17 @@
 {%extends "partials/main-layout.html"%}
-{%load i18n%}
+{%load i18n  users_extras%}
 {%block content%}
 
+{%user_allowed "delete_admin" as allow_delete_admin%}
+
+
+{%get_current_language as LANG%}
 <div class="container p-1 edit-user-container " style="padding: 1px">
+
 	<div class="row ng-scope">
 		<div class="col-md-4">
 			<div class="card">
+
 				<div class="card-body text-center">
 					<div class="pv-lg"><img class="center-block img-responsive img-circle img-thumbnail thumb96" src="/media/{{user.avatar}}" alt="Contact"></div>
 					<p class="m0 h3 text-bold">{{user.fullname}}</p>
@@ -14,22 +20,25 @@
 					<div class="mv-lg">
 						
 					</div>
-					<a href="/admins/delete/{{user.id}}"> <button {%if not 'delete_admin' in request.session.permissions %} disabled {%endif%}class="btn btn-danger "><i class="far fa-trash-alt"></i> {%trans "delete"%}</button></a>
+					<button data-id ="{{user.id}}" {%if not allow_delete_admin %} disabled {%endif%} class="btn btn-danger delete_user">
+						<i class="far fa-trash-alt "></i> {%trans "delete"%}</button>
 
 				</div>
 			</div>
 			
 		</div>
 		<div class="col-md-8">
+
+			<div class="card-header mt-3">
+				<div class="h3 text-center">{%trans "edit user"%}</div>
+			</div>
+
 			
-			<div class="card card-primary">
-				<div class="card-header">
-					<div class="h4 text-center">{%trans "edit user"%}</div>
-				</div>
+			<div class="card ">
 				<div class="card-body">
 
 					
-					{%include "partials/form_error.html"%}
+					{#%include "partials/form_error.html"%#}
 
 					<div class="row pv-lg">
 						<div class="col-lg-2"></div>
@@ -41,16 +50,22 @@
 
 								<div class="form-group">
 									<label for="username">{%trans "username"%}</label>
+									<p class="h5 text-danger">{{form.username.errors.as_text}}</p>
+
 									<input type="text" class="form-control" id="username" name="username" placeholder="" value="{{user.username}}">
 								</div>
 
 								<div class="form-group">
 									<label for="full-username">{%trans "fullname"%}</label>
+									<p class="h5 text-danger">{{form.fullname.errors.as_text}}</p>
+
 									<input type="text" class="form-control" id="fullname" name="fullname" placeholder="" value={{user.fullname}}>
 								</div>
 								
 								<div class="form-group">
 									<label for="username">{%trans "email"%}</label>
+									<p class="h5 text-danger">{{form.email.errors.as_text}}</p>
+
 									<input type="email" class="form-control" id="email" name="email" placeholder="" value="{{user.email}}">
 								</div>
 
@@ -63,12 +78,17 @@
 								
 								<div class="form-group">
 									<label for="password">{%trans "password"%}</label>
+									<p class="h5 text-danger">{{form.password.errors.as_text}}</p>
+
 									<input type="password" class="form-control" name="password" id="password" placeholder="">
 								</div>
 
 								
 								<div class="form-group">
+
 									<label for="confirm-password">{%trans "confirm password"%}</label>
+									<p class="h5 text-danger">{{form.confirm_password.errors.as_text}}</p>
+
 									<input name="confirm_password" type="password" class="form-control" id="confirm-password" placeholder="">
 								</div>
 
@@ -105,7 +125,13 @@
 
 										{%endif%}
 										
-										<label for="ch{{i.id}}bx" class="custom-control-label">{{i.name}}</label>
+										<label for="ch{{i.id}}bx" class="custom-control-label">
+											{%if LANG == "en" %}
+											{{i.name_en}}
+											{%else%}
+											{{i.name_ar}}
+											{%endif%}
+										</label>
 
 									</div>
 									

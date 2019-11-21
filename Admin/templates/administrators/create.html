@@ -1,7 +1,7 @@
 {%extends "partials/main-layout.html"%}
 {%load i18n%}
 {%block content%}
-
+{%get_current_language as LANG%}
 
 <div class="create-admin-form-wrapper container" style="width: 80%; padding: 1px">
 
@@ -72,12 +72,21 @@
 					 
 					 <div class="form-group">
 						 <label for="">{%trans "permissions"%}</label>
+						 
 						 {%for i in permissions%}
 						 <div class="custom-control custom-checkbox">
 							 <input name = "permissions[]" class="custom-control-input" type="checkbox" id="ch{{i.id}}bx" value="{{i.id}}">
-							 <label for="ch{{i.id}}bx" class="custom-control-label">{{i.name}}</label>
+
+							 <label for="ch{{i.id}}bx" class="custom-control-label">
+								 {%if LANG == "en" %}
+								 {{i.name_en}}
+								 {%else%}
+								 {{i.name_ar}}
+								 {%endif%}
+							 </label>
                          </div>
 						 {%endfor%}
+
 					 </div>
 
 					 

@@ -78,7 +78,7 @@
 					 }
 					 
 					 $.ajax({
-						 url: "/admin/product/delete_product_images/",
+						 url: "/en/admin/product/delete_product_images/",
 						 type: "POST",
 						 data: data,
 						 headers:{"X-CSRFToken": window.CSRF},
@@ -103,7 +103,7 @@
 					 $.ajax({
 						 type: "post",
 						 headers: {"X-CSRFToken": window.CSRF },
-						 url: "/admin/product/delete/" + $(this).data("id"),
+						 url: "/en/admin/product/delete/" + $(this).data("id") + "/",
 						 success: function(data){
 							 if(data.success == true){
 								 var noty = new Noty({
@@ -137,7 +137,7 @@
 					 $.ajax({
 						 type: "post",
 						 headers: {"X-CSRFToken": window.CSRF },
-						 url: "/admin/category/delete/" + $(this).data("id"),
+						 url: "/en/admin/category/delete/" + $(this).data("id"),
 						 success: function(data){
 							 if(data.success == true){
 								 var noty = new Noty({
@@ -170,7 +170,7 @@
 					 $.ajax({
 						 type: "post",
 						 headers: {"X-CSRFToken": window.CSRF },
-						 url: "/admin/delete/" + $(this).data("id"),
+						 url: "/en/admin/delete/" + $(this).data("id"),
 						 success: function(data){
 							 if(data.success == true){
 								 var noty = new Noty({

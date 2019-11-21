@@ -25,7 +25,7 @@ categories_urlpatterns = [
     path("/add/", c_v.create_category),
     path("/edit/<int:id>/", c_v.edit_category),
     path("/<int:id>/", c_v.detailed_category),
-    path("/delete/<int:id>", c_v.delete_category)
+    path("/delete/<int:id>/", c_v.delete_category)
 
 ]
 
@@ -36,18 +36,18 @@ products_urlpatterns = [
     path("/add/", p_v.create_product),
     path("/edit/<int:id>/", p_v.edit_product),
     path("/<int:id>", p_v.detailed_product),
-    path("/delete/<int:id>", p_v.delete_product),
+    path("/delete/<int:id>/", p_v.delete_product),
     path("/delete_product_images/", p_v.delete_product_images)
     
 ]
 
 
 urlpatterns = [
-    path("/", views.all_admins),
+    path("/", views.index_admin),
     path("/login/", views.login_admin),
     path("/logout/", views.logout_admin),
     path("/all/", views.all_admins),
-    path("/create/", views.create_admin),
+    path('/create/', views.create_admin),
     path("/edit/<int:id>", views.edit_admin),
     path("/<int:id>", views.detailed_admin),
     path("/delete/<int:id>", views.delete_admin),

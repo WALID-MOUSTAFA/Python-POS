@@ -99,7 +99,6 @@ def create_admin(request):
         # print(f"\n {settings.BASE_DIR}\n")
         # return False
         createAdminForm = CreateAdminForm(request.POST, request.FILES)
-        upload_url = os.path.join(settings.BASE_DIR, "media")
             
         user = Admin()
         
@@ -132,9 +131,7 @@ def create_admin(request):
 
             user.save()
 
-            print(upload_url + "/jdksajkdjaskjdkasjkas")
-            
-            with open(upload_url + "/" + avatar_name , "wb+") as dest:
+            with open(settings.MEDIA_ROOT + "/" + avatar_name , "wb+") as dest:
                 for i in avatar_file.chunks():
                     dest.write(i)
 
@@ -170,11 +167,10 @@ def edit_admin(request, id):
         context = {"user": db_user, "roles": db_roles, "permissions": db_permissions,  "user_permission_array": user_permission_array}
         
         updateAdminForm = UpdateAdminForm(request.POST, request.FILES)
-        upload_url = os.path.join(settings.BASE_DIR, "media")    
         user = old_user
         
         if not  updateAdminForm.is_valid():
-            
+            context ["form"] = updateAdminForm
             context["form_error"] = json.loads(updateAdminForm.errors.as_json()) 
             return render(request, "administrators/edit.html", context)
 
@@ -194,11 +190,22 @@ def edit_admin(request, id):
             print(f"\n {permissions} \n")
             
             if request.FILES.get("avatar") != None:
+                
                 avatar_file = request.FILES["avatar"]
                 ext = "." + avatar_file.name.split(".")[-1]
                 avatar_name = str(uuid.uuid4()) + ext
+
+                old_image = user.avatar
+                
+                if os.path.exists(settings.MEDIA_ROOT + "/" + old_image):
+                    os.remove(settings.MEDIA_ROOT + "/" + old_image)
+
+                with open(settings.MEDIA_ROOT + "/" + avatar_name , "wb+") as dest:
+                    for i in avatar_file.chunks():
+                        dest.write(i)
+
                 user.avatar = avatar_name
-             
+
             user.username = username
             user.fullname = fullname
 
@@ -216,11 +223,6 @@ def edit_admin(request, id):
                 print(f"\n {i}\n")
             user.save()
 
-
-            if request.FILES.get("avatar"):
-                with open(upload_url + "/" + avatar_name , "wb+") as dest:
-                    for i in avatar_file.chunks():
-                        dest.write(i)
 
             messages.success(request, f"user {user.username} updated successfully")
             return redirect("/admin/all")
