@@ -25,7 +25,7 @@ SECRET_KEY = '4^!12lcpoxpv!2m=qbnj5^(1+$7+b))or1j)x_ztj!v-9+z0!6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -62,7 +62,7 @@ ROOT_URLCONF = 'ecommerce.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "/templates/")],
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -142,8 +142,10 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT= os.path.join(BASE_DIR, "media")
 
-SESSION_ENGINE = "django.contrib.sessions.backends.file"
-SESSION_FILE_PATH = os.path.join(BASE_DIR, "tmp")
+# SESSION_ENGINE = "django.contrib.sessions.backends.file"
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+
+# SESSION_FILE_PATH = os.path.join(BASE_DIR, "tmp")
 
 
 INTERNAL_IPS = ('127.0.0.1') #for debug toolbar

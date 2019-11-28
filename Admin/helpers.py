@@ -2,17 +2,14 @@ from .models import Admin
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect
 
-def is_allowed(user_id, *args):
+
+def is_allowed(request, user_id, *args):
 
     try:
-        user = Admin.objects.prefetch_related("permission").get(id = user_id)
-
-        user_permission_array  = []
-    
-        for i in user.permission.all():
-
-            user_permission_array.append(i.name)
         
+        user_permission_array  = request.session["user_permissions"] 
+    
+
         for i in args:   
 
             if not i in user_permission_array:
@@ -25,6 +22,13 @@ def is_allowed(user_id, *args):
 
         print(f"\nuser not found\n")
         return redirect("/admin/")
+
+
+def is_own_profile(request, id):
+    if request.session.get("user_id") == int(id):
+        return True
+    return False
+        
 
 
     

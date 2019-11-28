@@ -40,6 +40,32 @@ msgstr "اللغة"
 msgid "close"
 msgstr "إغلاق"
 
+
+msgid "address"
+msgstr "العنوان"
+
+
+msgid "phone"
+msgstr "رقم الهاتف"
+
+
+msgid "search"
+msgstr "بحث"
+
+
+msgid "next"
+msgstr "التالي"
+
+
+msgid "previous"
+msgstr "السابق"
+
+
+msgid "None"
+msgstr "لا يوجد"
+
+
+
 ###############################################################
 
 msgid "administrators"
@@ -92,6 +118,14 @@ msgstr "معلومات عن المستخدم"
 
 msgid "show all"
 msgstr "عرض الكل"
+
+
+msgid "user created successfully"
+msgstr "تم إضافة المستخدم بنجاح"
+
+
+msgid "user updated successfully"
+msgstr "تم تعديل المستخدم بنجاح"
 
 ##############categories#######################
 
@@ -172,6 +206,14 @@ msgstr "تم تعديل الفئة بنجاح"
 msgid "product"
 msgstr "المنتج"
 
+
+msgid "product name"
+msgstr "اسم المنتج"
+
+msgid "product description"
+msgstr "وصف المنتج"
+
+
 msgid "products"
 msgstr "المنتجات"
 
@@ -191,8 +233,17 @@ msgstr "وصف المنتج بالإنجليزي"
 msgid "product description in arabic"
 msgstr "وصف المنتج بالعربي"
 
-msgid "sells price"
+
+msgid "buy price"
+msgstr "سعر الشراء"
+
+msgid "available quantity"
+msgstr "الكمية المتوفرة"
+
+
+msgid "sell price"
 msgstr "سعر البيع"
+
 
 msgid "description images"
 msgstr "الصور الوصفية"
@@ -224,26 +275,28 @@ msgstr "هل أنت واثق من حذف هذا المستخدم نهائيا؟"
 msgid "are you sure you want to delete category?"
 msgstr "هل أنت واثق من حذف هذه الفئة؟"
 
-# msgid ""
-# msgstr ""
+###################################clients###########################
 
-# msgid ""
-# msgstr ""
+msgid "clients"
+msgstr "العملاء"
 
-# msgid ""
-# msgstr ""
+msgid "there is no records"
+msgstr "لا يوجد سجلات"
 
-# msgid ""
-# msgstr ""
+msgid "create new client"
+msgstr "إضافة عميل جديد"
 
-# msgid ""
-# msgstr ""
+msgid "client info"
+msgstr "بيانات العميل"
 
-# msgid ""
-# msgstr ""
+msgid "client has been edited successfully"
+msgstr "تم تعديل بيانات العميل ينجاح"
 
-# msgid ""
-# msgstr ""
+msgid "client has been deleted successfully"
+msgstr "تم حذف العميل بنجاح"
+
+msgid "client added successfully"
+msgstr "تم إضافة العميل بنجاح"
 
 # msgid ""
 # msgstr ""

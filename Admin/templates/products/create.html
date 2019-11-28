@@ -62,13 +62,23 @@
 				</div>
 
 				<div class="form-group">
-					<p class="h5 text-danger">{{form.sell_price.errors.as_text}}</p>
+					<p class="h5 text-danger">{{form.buy_price.errors.as_text}}</p>
+					<label for="name"> {% trans "buy price" %} : </label>
+					<input type="text" class="form-control" id="" name="buy_price" placeholder="" value="{{product.buy_price}}"  >
+				</div>
+				
 
+				<div class="form-group">
+					<p class="h5 text-danger">{{form.sell_price.errors.as_text}}</p>
 					<label for="name"> {% trans "sells price" %} : </label>
 					<input type="text" class="form-control" id="name" name="sell_price" placeholder="" value="{{form.sell_price.value}}"  >
 				</div>
 
-
+				<div class="form-group">
+					<p class="h5 text-danger">{{form.available_quantity.errors.as_text}}</p>
+					<label for="name"> {% trans "available quantity" %} : </label>
+					<input type="text" class="form-control" id="name" name="available_quantity" placeholder="" value="{{product.available_quantity}}"  >
+				</div>
 				
 				<div class="form-group">
 

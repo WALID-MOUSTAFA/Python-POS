@@ -50,6 +50,7 @@ class Category(models.Model):
     id = models.BigAutoField(primary_key = True)
     desc_image = models.TextField(null = True)
     
+    
     class Meta:
         db_table = "categories"
 
@@ -70,7 +71,9 @@ class Category_translation(models.Model):
 class Product(models.Model):
     id = models.BigAutoField(primary_key = True)
     category = models.ForeignKey(Category, on_delete = models.SET_NULL, null = True)
-    sell_price = models.TextField();
+    buy_price = models.TextField(null = True)
+    sell_price = models.TextField(null = True);
+    available_quantity = models.TextField(null = True)
     
     class Meta:
         db_table = "products"
@@ -92,6 +95,19 @@ class Product_images(models.Model):
     id= models.BigAutoField(primary_key = True)
     image  = models.TextField()
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-
+    
+    
+    
     class Meta:
         db_table = "products_images"
+
+
+
+
+class Client(models.Model):
+    name = models.TextField()
+    phone = models.TextField()
+    address = models.TextField()
+
+    class Meta:
+        db_table = "clients"

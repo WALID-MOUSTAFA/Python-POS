@@ -3,9 +3,12 @@
 {%block content%}
 
 {%user_allowed "delete_admin" as allow_delete_admin%}
+{%user_allowed "edit_admin" as allow_edit_admin%}
 
 
 {%get_current_language as LANG%}
+{{form.errors}}
+
 <div class="container p-1 edit-user-container " style="padding: 1px">
 
 	<div class="row ng-scope">
@@ -92,6 +95,7 @@
 									<input name="confirm_password" type="password" class="form-control" id="confirm-password" placeholder="">
 								</div>
 
+								{%if allow_edit_admin%}
 								<div class="form-group">
 									<label>{%trans "role"%}</label>
 									<select name="roles" class="custom-select">
@@ -138,7 +142,7 @@
 									{%endfor%}
 								</div>
 
-								
+								{%endif%} <!-- end allow_edit_admin --> 
 								<div class="form-group">
 									<label for="avatar">{%trans "avatar"%}</label>
 									<div class="input-group">

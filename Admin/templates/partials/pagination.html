@@ -1,0 +1,30 @@
+{%load i18n%}
+<div class="pagination">
+	{% if model.has_previous %}
+	<li class="page-item">
+		<a class="page-link" href="?page={{ model.previous_page_number}}{%if request.GET.q != None%} &q={{request.GET.q}} {%endif%}">{%trans "previous"%}</a>
+	</li>
+	{%else%}
+	<li class="page-item disabled">
+		<a class="page-link" href="#">{%trans "previous"%}</a>
+	</li>
+	{% endif %}
+	{%for p in model.paginator.page_range%}
+	{%if p == model.number%}
+	<li class="page-item active" ><a class="page-link" href="?page={{p}}{%if request.GET.q != None%} &q={{request.GET.q}} {%endif%}">{{p}}</a></li>
+	{%else%}
+	<li class="page-item" ><a class="page-link" href="?page={{p}}{%if request.GET.q != None%}&q={{request.GET.q}} {%endif%}">{{p}}</a></li>
+	{%endif%}
+	{%endfor%}
+	
+	{% if model.has_next %}
+	<li class="page-item">
+		<a class="page-link" href="?page={{ model.next_page_number }}{%if request.GET.q != None%} &q={{request.GET.q}} {%endif%}">{%trans "next"%}</a>
+	</li>
+	{%else%}
+	<li class="page-item disabled">
+		<a class="page-link" href="#">{%trans "next"%}</a>
+	</li>
+	{% endif %}
+</span>
+</div>

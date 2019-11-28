@@ -11,123 +11,152 @@
 
 
 
-	<div class="container p-1" id="all_users" style="">
-		<div class="mt-5 card">
-			<div class="card-body table-responsive">
+<div class="container p-1" id="all_users" style="">
 
-				<div class="mb-5">
-					<a href="/admin/product/add">
-						<button {%if not allow_create_product%} disabled {%endif%}
-								class="btn btn-primary float-right"><i class="fa fa-plus">
-							</i> {%trans "add"%}
-						</button>
-					</a>
-				</div>
-				
-				<table id="all_products" class="table text-center" style="overflow:hidden">
-					<thead class="bg-primary">
-						<tr>
-							<th>{%trans "product name in english"%}</th>
-							<th>{%trans "product description in english"%}</th>
-							<th>{%trans "product name in arabic"%}</th>
-							<th>{%trans "product description in arabic"%}</th>
-							<th>{%trans "category" %} </th>
-							<th>{%trans "description images"%}</th>
-							<th>{%trans "actions"%}</th>
-						</tr>
-					</thead>
-					<tbody>
+	<div class="mt-2">
+		<p class="h1 text-center">{%trans "products"%}</p>
+	</div>
+	<div class="mt-5 card">
+		<div class="card-body ">
 
-						{%for p in products %}
-						
-						<tr>
-							
-								{%for p_en in products_en%}
-									{%if p_en.product.id == p.id%}
-										<td>{{p_en.name}}</td>
-										<td>{{p_en.desc}}</td>
-									{%endif%}
-								{%endfor%}
-								
-								{%for p_ar in products_ar%}
-									{%if p_ar.product.id == p.id%}
-										<td>{{p_ar.name}}</td>
-										<td>{{p_ar.desc}}</td>
-									{%endif%}
-								{%endfor%}
-								
-								
-								<td>
-									{%for c_trans in category_translation %}
-									{%if c_trans.Category.id == p.category.id and c_trans.language == LANG%}
-									{{c_trans.name}}
-									{%endif%}
-									{%endfor%}
-							
-								</td>
-
-								<td>
-									<div style="width:200px; height:100px" class="">
-
-									{%for i in images%}
-										{%if i.product.id == p.id%}
-										<img class=" d-inline img-responsive img-thumbnail" style="width:25%" src="/media/{{i.image}}" alt="" />
-										{%endif%}
-										{%endfor%}
-									</div>
-
-								</td>
-
-								<td>
-									<div class="row">
-
-
-										<div class="col-12 mb-1">
-									<a href="/admin/product/{{p.id}}">
-										 <button
-											 {%if not "show_admin" in request.session.permissions%} disabled {%endif%}
-											 data-user_id="{{u.id}}"
-											 class="btn btn-primary user_show">
-											 <i class="fa fa-eye"></i>
-											 show
-										 </button>
-									</a>
-									</div>
-										<div class="col-12 mb-1"> 
-										<a href="/admin/product/edit/{{p.id}}">
-											<button
-												{%if not allow_edit_product%} disabled {%endif%}
-
-												class="btn btn-info ">
-												<i class="fas fa-edit"></i>
-												{%trans "edit"%}
-											</button>
-										</a>
-										</div>
-
-										<div class="col-12 ">
-										
-											<button data-id ="{{p.id}}"
-													{%if not allow_delete_product%} disabled {%endif%}
-												class="btn btn-danger delete_product ">
-												<i class="far fa-trash-alt"></i>
-												{%trans "delete"%}
-											</button>
-									
-										</div>
-
-									</div>
-								</td>
-
-								
-						</tr>
-						{%endfor%} <!--end main prod -->
-					</tbody>
-				</table>
-
+			<div class="mb-2 float-right">
+				<a href="/admin/product/add">
+					<button {%if not allow_create_product%} disabled {%endif%}
+							class="btn btn-primary"><i class="fa fa-plus">
+						</i> {%trans "add"%}
+					</button>
+				</a>
+				<button id="csv" class="btn btn-success"> csv <i class="fa fa-table"></i> </button>
 			</div>
+
+			
+			<div class="float-left">
+				
+				<form class="inline-form" method="get" action=".">
+					<div class="row">
+						<input class="form-control d-inline col-8 " name="q" type="text" value="{{request.GET.q}}"/>
+						<button class="btn btn-primary col-3 offset-1" >{%trans "search"%}</button>
+					</div>
+				</form>
+
+				
+			</div>
+			
+			<div class="clearfix"></div>
+
+			{%if products %}
+			<table id="all_products" class="table table-responsive text-center" style="overflow-x:auto; overflow-y:hidden">
+				<thead class="bg-primary">
+					<tr>
+						<th>{%trans "product name"%}</th>
+						<th>{%trans "product description"%}</th>
+						<!-- <th>{%trans "product name in arabic"%}</th> -->
+						<!-- <th>{%trans "product description in arabic"%}</th> -->
+						<th>{%trans "category" %} </th>
+						<th>{%trans "buy price"%}</th>
+						<th>{%trans "sell price"%}</th>
+						<th>{%trans "available quantity"%}</th>
+						<th class="csv-exclude">{%trans "description images"%}</th>
+						<th class="csv-exclude">{%trans "actions"%}</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					{%for p in products %}
+					
+					<tr>
+
+						
+						
+						{%for pt in products_trans%}
+						{%if pt.product.id == p.id%}
+						<td>{{pt.name}}</td>
+						<td>{{pt.desc}}</td>
+						{%endif%}
+						{%endfor%}
+						
+						
+						<td>
+							{%for c_trans in category_translation %}
+							{%if c_trans.Category.id == p.category.id and c_trans.language == LANG%}
+							{{c_trans.name}}
+							{%endif%}
+							{%endfor%}
+						</td>
+
+						<td>{%if p.buy_price is None or p.buy_price == ""%} {%trans "None"%} {%else%} {{p.buy_price}} {%endif%}</td>
+						<td>{%if p.sell_price is None or p.sell_price == ""%} {%trans "None"%} {%else%} {{p.sell_price}} {%endif%}</td>
+						<td>{%if p.available_quantity is None or p.available_quantity == ""%} {%trans "None"%} {%else%} {{p.available_quantity}} {%endif%}</td>
+						<td>
+							<div style="width:200px; height:100px" class="">
+
+								{%for i in images%}
+								{%if i.product.id == p.id%}
+								<img class=" d-inline img-responsive img-thumbnail" style="width:25%" src="/media/{{i.image}}" alt="" />
+								{%endif%}
+								{%endfor%}
+							</div>
+
+						</td>
+
+						
+						<td>
+							
+							<div class="row">
+
+								
+								<div class="col-12 mb-1">
+									<a href="/admin/product/{{p.id}}">
+										<button
+											
+											data-user_id="{{u.id}}"
+											class="btn btn-primary user_show">
+											<i class="fa fa-eye"></i>
+											show
+										</button>
+									</a>
+								</div>
+								<div class="col-12 mb-1"> 
+									<a href="/admin/product/edit/{{p.id}}">
+										<button
+											{%if not allow_edit_product%} disabled {%endif%}
+
+											class="btn btn-info ">
+											<i class="fas fa-edit"></i>
+											{%trans "edit"%}
+										</button>
+									</a>
+								</div>
+
+								<div class="col-12 ">
+									
+									<button data-id ="{{p.id}}"
+											{%if not allow_delete_product%} disabled {%endif%}
+											class="btn btn-danger delete_product ">
+										<i class="far fa-trash-alt"></i>
+										{%trans "delete"%}
+									</button>
+									
+								</div>
+
+							</div>
+						</td>
+					</tr>
+					
+					{%endfor%} <!--end main prod -->
+				</tbody>
+			</table>
+			
+			{%include "partials/pagination.html" with model=products %}
+			
+
+			{%else%} 
+			<p class="h1">{%trans "there is no records"%}</p>
+			{%endif%} <!-- end if products -->
+			
 		</div>
 	</div>
+</div>
 
 
 {%endblock content%}

@@ -1,0 +1,211 @@
+{%load i18n%}
+
+<script>
+	window.CSRF = "{{csrf_token}}";
+
+	(function delete_product_images(){
+		var images = [];
+		
+		$("img.detailed_product_image").on("click", function(){
+			image_name = $(this).data("name");
+
+			if (images.indexOf(image_name) == -1) {
+				images.push(image_name);
+				$(this).css({borderColor:  "red", borderWidth: 7, borderStyle: "solid"})
+			}else{
+				images.splice(images.indexOf(image_name), 1);
+				$(this).css("border", "none");
+				
+			}
+		}); //end on
+
+		$("div.detailed_product button#delete_selected_images").on("click", function(){
+			if (confirm ("{%trans 'are you sure you want to delete those pictures?'%}")) {
+				data = {
+					images: images
+				}
+				
+				$.ajax({
+					url: "/en/admin/product/delete_product_images/",
+					type: "POST",
+					data: data,
+					headers:{"X-CSRFToken": window.CSRF},
+					
+					success: function(data){
+						if (data.success == true) {
+							window.location.reload()
+						}
+					}
+				});
+				
+
+			}
+		}); 
+	}());
+	
+	(function delete_product(){
+		
+		$("button.delete_product").on("click", function(e){
+			
+			if( confirm("{%trans "are you sure you want to delete product?"%}") ){
+				$.ajax({
+					type: "post",
+					headers: {"X-CSRFToken": window.CSRF },
+					url: "/en/admin/product/delete/" + $(this).data("id") + "/",
+					success: function(data){
+						if(data.success == true){
+							var noty = new Noty({
+								
+								type: "success",
+								text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i>" + data.message + "</div>",
+								timeout: 1500,
+								closeWith: ['button'],
+								theme: "relax"
+
+							}).show()
+							setTimeout(function(){
+								window.location.href = "/admin/product/";
+							}, 2000)
+						}
+					}
+				}); //end ajax call
+
+			} //end confirm
+
+		});
+		
+	}());
+
+
+	(function delete_category(){
+		
+		$("button.delete_category").on("click", function(e){
+			
+			if( confirm("{%trans "are you sure you want to delete category?"%}") ){
+				$.ajax({
+					type: "post",
+					headers: {"X-CSRFToken": window.CSRF },
+					url: "/en/admin/category/delete/" + $(this).data("id"),
+					success: function(data){
+						if(data.success == true){
+							var noty = new Noty({
+								
+								type: "success",
+								text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i>" + data.message + "</div>",
+								timeout: 1500,
+								closeWith: ['button'],
+								theme: "relax"
+
+							}).show()
+							setTimeout(function(){
+								window.location.href = "/admin/category/";
+							}, 2000)
+						}
+					}
+				}); //end ajax call
+
+			} //end confirm
+
+		});
+		
+	}());
+
+	(function delete_user(){
+		
+		$("button.delete_user").on("click", function(e){
+			
+			if( confirm("{%trans "are you sure you want to delete this user?"%}") ){
+				$.ajax({
+					type: "post",
+					headers: {"X-CSRFToken": window.CSRF },
+					url: "/en/admin/delete/" + $(this).data("id"),
+					success: function(data){
+						if(data.success == true){
+							var noty = new Noty({
+								
+								type: "success",
+								text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i>" + data.message + "</div>",
+								timeout: 1500,
+								closeWith: ['button'],
+								theme: "relax"
+
+							}).show()
+							setTimeout(function(){
+								window.location.href = "/admin/";
+							}, 2000)
+						}
+					}
+				}); //end ajax call
+
+			} //end confirm
+
+		});
+		
+	}());
+
+	(function delete_client(){
+		
+		$("button.delete_client").on("click", function(e){
+			
+			if( confirm("{%trans "are you sure you want to delete this client?"%}") ){
+				$.ajax({
+					type: "post",
+					headers: {"X-CSRFToken": window.CSRF },
+					url: "/en/admin/client/delete/" + $(this).data("id") + "/",
+					success: function(data){
+						if(data.success == true){
+							var noty = new Noty({
+								
+								type: "success",
+								text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i>" + data.message + "</div>",
+								timeout: 1500,
+								closeWith: ['button'],
+								theme: "relax"
+
+							}).show()
+							setTimeout(function(){
+								window.location.href = "/admin/client/";
+							}, 2000)
+						}
+					}
+				}); //end ajax call
+
+			} //end confirm
+
+		});
+		
+	}());
+	
+	</script>
+
+
+{%for m in messages%}
+
+{%if "error" in m.tags %}
+
+<script>
+	var noty = new Noty({
+		type: "error",
+		text: '{{ m.message}}',
+		timeout: 1500,
+		closeWith: ['button'],
+		theme: "relax"
+
+	}).show()
+</script>
+{%elif "success in m.tags"%}
+<script>
+	var noty = new Noty({
+		type: "success",
+		text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i> {{m.message}} </div>",
+		timeout: 1500,
+		closeWith: ['button'],
+		theme: "relax",
+		
+	}).show()
+
+	</script>
+
+{%endif%}
+{%endfor%}
+

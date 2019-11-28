@@ -1,32 +1,76 @@
 import os
 import json
 import uuid
+from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponseServerError
 from django.shortcuts import render, HttpResponse, redirect
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, get_language
 from .models import Category_translation, Product_translation, Product, Product_images
 from .forms import CreateProductForm, UpdateProductForm
 from django.conf import settings
 from django.contrib import messages
+from django.db.models import Q
 
 #---------------------------------------------------------------------------------------#
 
 
 
 def index_product(request):
-    products_en =  Product_translation.objects.filter(language = "en")
-    products_ar =  Product_translation.objects.filter(language = "ar")
-    products    = Product.objects.prefetch_related("category").all()
-    images      = Product_images.objects.all()
+
+    per_page = 2
+    page = request.GET.get("page", 1)
+    LANG = get_language()
+    
+    if request.GET.get("q", None) != None: ##if search exists
+        q = request.GET.get("q")
+        
+
+        if LANG=="en":
+            products_trans =  Product_translation \
+                                 .objects.prefetch_related("product") \
+                                 .filter( Q(Q(name__contains=q) | Q(desc__contains=q)), language = "en")
+        else:
+            products_trans =  Product_translation \
+                                 .objects.prefetch_related("product") \
+                                 .filter( Q(name__contains=q) | Q(desc__contains=q), language = "ar",)
+
+            
+        result_products_trans_ids = products_trans.values_list('product__id', flat=True) 
+
+        products    =  Product.objects.prefetch_related("category").filter(id__in = result_products_trans_ids).all()
+
+        images = Product_images.objects \
+                               .prefetch_related("product").all()
+        category_translation = Category_translation \
+            .objects.prefetch_related("Category").all()
+
+    else:
+        
+        products    =  Product.objects.prefetch_related("category").all()
+
+        if LANG == "en":
+            products_trans =  Product_translation.objects.prefetch_related("product").filter(language = "en")
+        else:
+            products_trans =  Product_translation.objects.prefetch_related("product").filter(language = "ar")
+
+        images = Product_images.objects.prefetch_related("product").all()
+
+        category_translation = Category_translation.objects.prefetch_related("Category").all()
+        
+    
     context = {
-        "products": products,
-        "category_translation": Category_translation.objects.all(),
-        "products_en": products_en,
-        "products_ar" : products_ar,
+        "products": Paginator(products, per_page).get_page(page),
+        "products_trans" : Paginator(products_trans, per_page).get_page(page),
         "images"     : images,
+        "category_translation": category_translation,
     }
+    print(len(products_trans))
     return render(request, "products/all.html", context)
 
+
+
+
+########################################################################################################################################3
 
 def create_product(request):
     context = {
@@ -52,7 +96,10 @@ def create_product(request):
       
             product = Product()
             product.category = Category_translation.objects.get(name = request.POST["category"]).Category
+            product.buy_price = request.POST["buy_price"]
             product.sell_price = request.POST["sell_price"]
+            product.available_quantity = request.POST["available_quantity"]
+                        
             product.save()
 
             product_trans_ar = Product_translation()
@@ -112,7 +159,9 @@ def edit_product(request, id):
         else:
             
             product.category = Category_translation.objects.get(name = request.POST["category"]).Category
+            product.buy_price = request.POST["buy_price"]
             product.sell_price = request.POST["sell_price"]
+            product.available_quantity = request.POST["available_quantity"]
             product.save()
 
         
@@ -174,10 +223,10 @@ def delete_product(request, id):
 
 
         if product.delete():
-            return JsonResponse({"success": True , "message": "product has been deleted successfully"})
+            return JsonResponse({"success": True , "message": _("product has been deleted successfully")})
         
         else:
-            return JsonResponse({"success": False , "message": "can't delete this product"})
+            return JsonResponse({"success": False , "message": _("can't delete this product")})
     else:
         return JsonResponse({"error": "wrong method"})
 

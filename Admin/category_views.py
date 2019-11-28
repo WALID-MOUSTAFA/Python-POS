@@ -5,20 +5,42 @@ from .forms import CreateCategoryForm, UpdateCategoryForm
 from .models import Category, Category_translation
 import json
 import os
-from django.conf import settings
-from django.utils.translation import gettext_lazy as _
 import uuid
+from django.conf import settings
+from django.utils.translation import gettext_lazy as _, get_language
+from django.db.models import Q
+from django.core.paginator import Paginator
 
 def index_category(request):
-    categories = list(Category.objects.all())
-    categories_en = list(Category_translation.objects.filter(language = "en"))
-    categories_ar = list(Category_translation.objects.filter(language = "ar"))
-    
+    per_page = 2
+    page= request.GET.get("page", 1)
+    LANG = get_language()
+
+    if request.GET.get("q", None):
+        q = request.GET.get("q")
+
+        if LANG == "en":
+            categories_trans = Category_translation.objects.filter(Q(name__contains=q) | Q(desc__contains=q), language = "en")
+        else:
+            categories_trans = Category_translation.objects.filter(Q(name__contains=q) | Q(desc__contains=q), language = "ar")
+                        
+        
+        result_categories_trans_ids = categories_trans.values_list("Category__id", flat=True)
+
+        categories = Category.objects.filter(id__in=result_categories_trans_ids)
+        
+    else:
+        if LANG=="en":
+            categories_trans = Category_translation.objects.filter(language = "en")
+        else:
+            categories_trans = Category_translation.objects.filter(language = "ar")
+        
+        categories = Category.objects.all()
+
     context = {
         "title": "Categories",
-        "categories_en": categories_en,
-        "categories_ar": categories_ar,
-        "categories" : categories
+        "categories_trans": Paginator(categories_trans, per_page).get_page(page),
+        "categories" : Paginator(categories, per_page).get_page(page)
     }
 
 
@@ -29,6 +51,7 @@ def index_category(request):
 
 def create_category(request):
     context = {"title": "Create category"}
+
     if request.method == "GET":
         return render(request, "categories/create.html",context)
 

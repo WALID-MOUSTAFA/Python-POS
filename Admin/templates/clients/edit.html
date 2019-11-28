@@ -1,0 +1,59 @@
+{%extends "partials/main-layout.html"%}
+{%load i18n users_extras%}
+{%block content%}
+
+{%user_allowed "edit_category" as allow_edit_category%}
+{%user_allowed "delete_category" as allow_delete_category%}
+{%user_allowed "create_category" as allow_create_category%}
+{%user_allowed "show_category" as allow_show_category%}
+
+
+<div class="form-wrapper container" style="width: 80%; padding: 1px">
+
+	
+	<div class="text-center mt-4">
+		<div class="text-center h3">{%trans "edit client"%}</div>
+	</div>
+	
+	<div class="card  card-primary mt-5">
+
+		
+		<div class="card-body">
+
+
+
+			{#%include "partials/form_error.html"%#}
+			
+			
+			<form role="form" method="POST" action="" enctype="multipart/form-data">
+				{%csrf_token%}
+				<div class="form-group">
+					<label for="name"> {% trans "name"  %} : </label>
+					<p class="h5 text-danger">{{form.name.errors.as_text}}</p>
+					<input type="text" class="form-control" id="name" name="name" placeholder="" value="{{client.name}}">
+				</div>
+
+				
+				<div class="form-group">
+					<p class="h5 text-danger">{{form.address.errors.as_text}}</p>
+
+					<label for="name"> {% trans "address" %} : </label>
+					
+					<textarea type="text" class="form-control" name="address" placeholder="">{{client.address}}</textarea>
+				</div>
+
+				
+				<div class="form-group">
+					<p class="h5 text-danger">{{form.phone.errors.as_text}}</p>
+
+					<label for="full-username">{%trans 'phone'%} : </label>
+					<input type="text" class="form-control" id="phone" name="phone" placeholder="" value="{{client.phone}}"  >
+				</div>
+
+
+				<button type="submit" class="btn btn-primary float-right"><i class="fa fa-plus"></i> {%trans "edit"%}</button>
+			</form>
+		</div>
+	</div>
+</div>
+{%endblock content%}

@@ -23,17 +23,12 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.conf.urls.i18n import i18n_patterns
 from django.utils.translation import gettext_lazy as _ 
-
+from django.shortcuts import HttpResponse
 
 def index(request):
-    from django.http import HttpResponse
-  
     return HttpResponse("<h1> <a href='/admin/'> Admin</a> </h1>")
 
-urlpatterns = [
-   
-
-]
+urlpatterns = []
 
 urlpatterns += i18n_patterns(
 
@@ -41,8 +36,9 @@ urlpatterns += i18n_patterns(
     path('djangoadmin/', admin.site.urls),
     path("admin", include(adminUrls) ),
     path("commons", include(commonsUrls)),
+    prefix_default_language=True)
 
-    prefix_default_language=True)+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 if settings.DEBUG:

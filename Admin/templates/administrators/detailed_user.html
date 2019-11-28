@@ -1,7 +1,7 @@
 {%extends "partials/main-layout.html"%}
 {%load i18n users_extras%}
 {%block content%}
-
+{%get_current_language as LANG%}
 {%user_allowed "edit_admin" as allow_edit_admin%}
 {%user_allowed "delete_admin" as allow_delete_admin%}
 {%user_allowed "create_admin" as allow_create_admin%}
@@ -21,14 +21,16 @@
 				<div class="float-right">
 
 					<a href="/admin/edit/{{user.id}}">
-						<button class="btn btn-primary" {%if not allow_edit_admin%} disabled{%endif%}>
+						{% is_own_profile user.id as own_profile %}
+
+						<button class="btn btn-primary" {%if not allow_edit_admin and not own_profile%} disabled{%endif%}>
 							<i class="fa fa-edit"> </i>
 							{%trans "edit"%}</button>
 					</a>
 					
 					<button {%if not allow_delete_admin%} disabled {%endif%}   data-id= "{{user.id}}" class="btn btn-danger delete_user">
 						<i class="fa fa-trash-alt"> </i>
-						{%trans "delete"%}
+ 						{%trans "delete"%}
 					</button>
 
 				</div>
@@ -36,23 +38,30 @@
 				<img style="Width: 400px" class="d-block m-auto img-thumbnail" src="/media/{{user.avatar}}" alt="" />
 				<p class="d-block h2 bold m-auto text-center">{{user.fullname}}</p>
 
-				<table class="mt-5 table-secondary table-striped table text-center">
+				<table class="mt-5 table-secondary table-striped table table-bordered text-center">
 
-					<tr><td>{%trans "username"%}</td> <td>{{user.username}}</td></tr>
-					<tr><td>{%trans "email"%}</td> <td>{{user.email}}</td></tr>
+					<tr>
+						<td>{%trans "username"%}</td> <td>{{user.username}}</td>
+					</tr>
 
-				</table>
-				
-				<div>
-					<p> {%trans "permissions"%}:</p>
-					<ul class="list-group list-group-flush">
+					<tr>
+						<td>{%trans "email"%}</td> <td>{{user.email}}</td>
+					</tr>
+
+					<tr>
+						<td>{%trans "permissions"%}</td>
+						<td>	<ul class="list-group list-secondary list-group-flush">
 						{%for permission in user.permission.all%}
-						<li class="list-group-item text-primary ">
-							{{forloop.counter}}- {{ permission.name}}
+						<li class="list-group-item  list-group-item-secondary ">
+							{{forloop.counter}}- {%if LANG == "en"%} {{ permission.name_en}} {%else%} {{permission.name_ar}} {%endif%}
 						</li>
 						{%endfor%}
-					</ul>
-				</div>
+					</ul></td>
+					</tr>
+					
+				</table>
+				
+			
 
 				<div   class="mt-5">
 					{%trans "role"%}: <p data-toggle="tooltip" data-placement="top" title="{{user.role.desc}}" class="h1">{{user.role.name}}</p>					

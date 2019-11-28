@@ -7,7 +7,6 @@
 {%user_allowed "create_admin" as allow_create_admin%}
 {%user_allowed "show_admin" as allow_show_admin%}
 
-
 <div class="container p-1" id="all_users" style="">
 	<div class="mt-5 card">
 		<div class="card-body table-responsive">
@@ -16,8 +15,19 @@
 				<a href="/admin/create"> <button {%if not allow_create_admin%} disabled{%endif%} class="btn btn-primary"><i class="fa fa-plus"> </i> {%trans "add"%}</button></a>
 			</div>
 
-			<div class="clearfix"></div>
+			<div class="float-left">
+				<form class="inline-form" method="get" action=".">
+					<div class="row">
+						<input class="form-control d-inline col-8 " name="q" type="text" value="{{request.GET.q}}"/>
+						<button class="btn btn-primary col-3 offset-1" >{%trans "search"%}</button>
+					</div>
+				</form>
+			</div>
+
 			
+			<div class="clearfix"></div>
+
+			{%if users%}
 			<table id="" class="table" style="overflow:hidden">
 				<thead class="bg-primary">
 					<tr>
@@ -34,7 +44,7 @@
 						<td>{{u.username}}</td>
 						<td>{{u.fullname}}</td>
 						<td>{{u.email}}</td>
-						<td><div> <img style="width: 200px" class=" img-responsive img-thumbnail"alt="" src="/media/{{u.avatar}}"/></div></td>
+						<td><div> <img style="width: 100px" class=" img-responsive img-thumbnail"alt="" src="/media/{{u.avatar}}"/></div></td>
 						<td>
 
 							<a href="/admin/{{u.id}}">
@@ -47,9 +57,11 @@
 							
 							<a href="/admin/edit/{{u.id}}">
 								<button
-									
-									{%if not allow_edit_admin%} disabled {%endif%}
 
+									{% is_own_profile u.id as own_profile %}
+																		
+									{%if not allow_edit_admin and  not own_profile  %} disabled {%endif%}
+									
 									class="btn btn-info ">
 									<i class="fas fa-edit"></i>
 								</button>
@@ -70,7 +82,10 @@
 					{%endfor%}
 				</tbody>
 			</table>
-
+			{%include "partials/pagination.html" with model=users%}
+			{%else%}
+			<p class="h1">{%trans "there is no records"%}</p>
+			{%endif%}
 		</div>
 	</div>
 </div>

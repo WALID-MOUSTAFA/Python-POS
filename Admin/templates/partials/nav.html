@@ -20,7 +20,9 @@
           {{request.session.username}}
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		   <div class="dropdown-divider"></div>
+			<a class="dropdown-item" href="/admin/{{request.session.user_id}}">{%trans "profile"%}</a>
+
+			<div class="dropdown-divider"></div>
 		  <a class="dropdown-item" href="/admin/logout">{%trans "logout"%}</a>
          
         </div>

@@ -18,6 +18,13 @@ from django.urls import path, include
 from . import views 
 from . import category_views as c_v
 from . import product_views  as p_v
+from . import client_views  as client_views
+from . import custom_auth_views as auth_views
+
+custom_auth_urlpatterns = [
+    path("/login/", auth_views.login_admin),
+    path("/logout/", auth_views.logout_admin),
+]
 
 categories_urlpatterns = [
     path("/", c_v.index_category),
@@ -27,6 +34,16 @@ categories_urlpatterns = [
     path("/<int:id>/", c_v.detailed_category),
     path("/delete/<int:id>/", c_v.delete_category)
 
+]
+
+
+clients_urlpatterns = [
+    path("/", client_views.index_client),
+    path("/all/", client_views.index_client),
+    path("/add/", client_views.create_client),
+    path("/edit/<int:id>/", client_views.edit_client),
+    path("/<int:id>/", client_views.detailed_client),
+    path("/delete/<int:id>/", client_views.delete_client)
 ]
 
 
@@ -44,14 +61,15 @@ products_urlpatterns = [
 
 urlpatterns = [
     path("/", views.index_admin),
-    path("/login/", views.login_admin),
-    path("/logout/", views.logout_admin),
     path("/all/", views.all_admins),
     path('/create/', views.create_admin),
     path("/edit/<int:id>", views.edit_admin),
     path("/<int:id>", views.detailed_admin),
     path("/delete/<int:id>", views.delete_admin),
-
     path("/category", include(categories_urlpatterns)),
-    path("/product", include(products_urlpatterns))
+    path("/product", include(products_urlpatterns)),
+    path("/client", include(clients_urlpatterns))
 ]
+
+
+urlpatterns += custom_auth_urlpatterns

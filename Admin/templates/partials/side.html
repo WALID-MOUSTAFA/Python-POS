@@ -16,7 +16,7 @@
 				<img src="/media/{{request.session.user_avatar}}" class="img-circle elevation-2" alt="User Image">
 			</div>
 			<div class="info">
-				<a href="#" class="d-block">{{request.session.username}}</a>
+				<a href="/admin/{{request.session.user_id}}" class="d-block">{{request.session.username}}</a>
 			</div>
 		</div>
 
@@ -114,6 +114,37 @@
 				<!-- end products -->
 
 
+
+				<!-- start clients -->
+				<li class="nav-item has-treeview ">
+					<a href="#" class="nav-link ">
+						<i class="nav-icon fas fa-list"></i>
+						<p>
+							{%trans "clients"%}
+							<I class="right fas fa-angle-left"></i>
+						</p>
+					</a>
+
+					<ul class="nav nav-treeview">
+						<li class="nav-item">
+							<a href="/admin/client/all" class="nav-link ">
+								<i class="nav-icon fa fa-external-link-alt"></i>
+								<p>{%trans "show all"%}</p>
+							</a>
+						</li>
+
+						<li class="nav-item">
+							<a href="/admin/client/add" class="nav-link">
+								<i class="fas fa-plus nav-icon"></i>
+								<p>{%trans "add"%}</p>
+							</a>
+						</li>
+						
+					</ul>
+				</li>
+				<!-- end clients -->
+
+
 				
 				<!-- start languages -->
 				<li class="nav-item has-treeview ">
@@ -123,9 +154,7 @@
 							{%trans 'language'%}
 							<I class="right fas fa-angle-left"></i>
 						</p>
-					</a>
-
-					
+					</a>				
 					<ul class="nav nav-treeview">
 						
 						<li class="nav-item">
@@ -144,8 +173,8 @@
 						
 					</ul>
 				</li>
-				<!-- end languages -->
 
+				<!-- end languages -->
 				
 				
 			</ul>
