@@ -119,3 +119,16 @@ def fake(request):
 #     for index, i in enumerate(p):
 #          res.write(str(index +1 ) + "- " + i.name + "|" +i.language +"</br>")    
 #     return res
+
+
+def datatables(request):
+    import csv
+    from Admin.models import Admin
+    response = HttpResponse(content_type="text/csv")
+    response['Content-Disposition'] = 'attachment; filename="users.csv"'
+    writer = csv.writer(response)
+    writer.writerow(['username', 'fullname', 'email'])
+    users = Admin.objects.all().values_list("username", "fullname", "email")
+    for user in users:
+        writer.writerow(user)
+    return response

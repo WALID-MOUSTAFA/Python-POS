@@ -52,10 +52,19 @@
 						<td>{{c.address}}</td>
 						<td>{{c.phone}}</td>
 						<td>			
+							<a href="/admin/client/{{c.id}}/orders/add">
+								<button
+									data-user_id="{{u.id}}"
+									class="btn btn-success">
+									{%trans "add order"%} 
+									<i class="fa fa-plus"></i>
+								</button>
+							</a>
+
 							<a href="/admin/client/{{c.id}}">
 								<button
 									data-user_id="{{u.id}}"
-									class="btn btn-primary user_show">
+												  class="btn btn-primary user_show">
 									<i class="fa fa-eye"></i>
 								</button>
 							</a>
@@ -63,33 +72,33 @@
 							<a href="/admin/client/edit/{{c.id}}">
 								<button	{%if not allow_edit_client%} disabled {%endif%}
 
-										class="btn btn-info ">
+									class="btn btn-info ">
 									<i class="fas fa-edit"></i>
 								</button>
 							</a>
 
 							<button data-id="{{c.id}}"
-									{%if not allow_delete_client%} disabled {%endif%}
-									class="btn btn-danger delete_client ">
+											 {%if not allow_delete_client%} disabled {%endif%}
+											 class="btn btn-danger delete_client ">
 								<i class="far fa-trash-alt"></i>
 							</button>
-</a>
-</td>
+				
+						</td>
 
 
-</tr>
-{%endfor%}
-</tbody>
-</table>
+					</tr>
+					{%endfor%}
+				</tbody>
+			</table>
 
-{%include "partials/pagination.html" with model=clients%}
+			{%include "partials/pagination.html" with model=clients%}
 
-{%else%}
-<p class="h1">{%trans "there is no records"%}</p>
-{%endif%}
+			{%else%}
+			<p class="h1">{%trans "there is no records"%}</p>
+			{%endif%}
 
-</div>
-</div>
+		</div>
+	</div>
 </div>
 
 

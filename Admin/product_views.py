@@ -72,6 +72,62 @@ def index_product(request):
 
 ########################################################################################################################################3
 
+def filtered_by_category_product(request, category_id):
+
+    per_page = 2
+    page = request.GET.get("page", 1)
+    LANG = get_language()
+    
+    if request.GET.get("q", None) != None: ##if search exists
+        q = request.GET.get("q")        
+
+        if LANG=="en":
+            products_trans =  Product_translation \
+                                 .objects.prefetch_related("product", "product__category") \
+                                 .filter( Q(Q(name__contains=q) | Q(desc__contains=q)), language = "en", product__category__id=category_id)
+        else:
+            products_trans =  Product_translation \
+                                 .objects.prefetch_related("product", "product__category") \
+                                 .filter( Q(name__contains=q) | Q(desc__contains=q), language = "ar", product__category__id=category_id)
+
+            
+        result_products_trans_ids = products_trans.values_list('product__id', flat=True) 
+
+        products    =  Product.objects.prefetch_related("category").filter(id__in = result_products_trans_ids).all()
+
+        images = Product_images.objects \
+                               .prefetch_related("product").all()
+        category_translation = Category_translation \
+            .objects.prefetch_related("Category").all()
+
+    else:
+        
+        products    =  Product.objects.prefetch_related("category").filter(category__id = category_id)
+
+        if LANG == "en":
+            products_trans =  Product_translation.objects.prefetch_related("product", "product__category").filter(language = "en", product__category__id=category_id )
+        else:
+            products_trans =  Product_translation.objects.prefetch_related("product", "product__category").filter(language = "ar", product__category__id=category_id )
+
+        images = Product_images.objects.prefetch_related("product").all()
+
+        category_translation = Category_translation.objects.prefetch_related("Category").all()
+        
+    
+    context = {
+        "products": Paginator(products, per_page).get_page(page),
+        "products_trans" : Paginator(products_trans, per_page).get_page(page),
+        "images"     : images,
+        "category_translation": category_translation,
+    }
+    print(len(products_trans))
+    return render(request, "products/all.html", context)
+
+
+########################################################################################################################################
+
+
+
 def create_product(request):
     context = {
         "title": _("Add product"),

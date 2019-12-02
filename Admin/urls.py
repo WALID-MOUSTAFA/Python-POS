@@ -19,6 +19,7 @@ from . import views
 from . import category_views as c_v
 from . import product_views  as p_v
 from . import client_views  as client_views
+from . import order_views as order_views
 from . import custom_auth_views as auth_views
 
 custom_auth_urlpatterns = [
@@ -37,19 +38,10 @@ categories_urlpatterns = [
 ]
 
 
-clients_urlpatterns = [
-    path("/", client_views.index_client),
-    path("/all/", client_views.index_client),
-    path("/add/", client_views.create_client),
-    path("/edit/<int:id>/", client_views.edit_client),
-    path("/<int:id>/", client_views.detailed_client),
-    path("/delete/<int:id>/", client_views.delete_client)
-]
-
-
 products_urlpatterns = [
     path("/all/", p_v.index_product),
     path("/", p_v.index_product),
+    path("/cat_filt/<int:category_id>/", p_v.filtered_by_category_product),
     path("/add/", p_v.create_product),
     path("/edit/<int:id>/", p_v.edit_product),
     path("/<int:id>", p_v.detailed_product),
@@ -58,6 +50,23 @@ products_urlpatterns = [
     
 ]
 
+
+clients_urlpatterns = [
+    path("/", client_views.index_client),
+    path("/all/", client_views.index_client),
+    path("/add/", client_views.create_client),
+    path("/edit/<int:id>/", client_views.edit_client),
+    path("/<int:id>/", client_views.detailed_client),
+    path("/delete/<int:id>/", client_views.delete_client),
+    ##orders
+    path("/<int:client_id>/orders/add", order_views.create_order)
+]
+
+orders_urlpatterns = [
+    path("/", order_views.index_order),
+    path("/all", order_views.index_order),
+    path("/<int:order_id>/products/", order_views.get_products_order)
+]
 
 urlpatterns = [
     path("/", views.index_admin),
@@ -68,7 +77,8 @@ urlpatterns = [
     path("/delete/<int:id>", views.delete_admin),
     path("/category", include(categories_urlpatterns)),
     path("/product", include(products_urlpatterns)),
-    path("/client", include(clients_urlpatterns))
+    path("/client", include(clients_urlpatterns)),
+    path("/order", include(orders_urlpatterns))
 ]
 
 

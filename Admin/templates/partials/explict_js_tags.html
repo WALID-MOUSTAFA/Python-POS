@@ -1,182 +1,300 @@
 {%load i18n%}
 
 <script>
-	window.CSRF = "{{csrf_token}}";
+ window.CSRF = "{{csrf_token}}";
 
-	(function delete_product_images(){
-		var images = [];
+ (function delete_product_images(){
+	 var images = [];
+	 
+	 $("img.detailed_product_image").on("click", function(){
+		 image_name = $(this).data("name");
+
+		 if (images.indexOf(image_name) == -1) {
+			 images.push(image_name);
+			 $(this).css({borderColor:  "red", borderWidth: 7, borderStyle: "solid"})
+		 }else{
+			 images.splice(images.indexOf(image_name), 1);
+			 $(this).css("border", "none");
+			 
+		 }
+	 }); //end on
+
+	 $("div.detailed_product button#delete_selected_images").on("click", function(){
+		 if (confirm ("{%trans 'are you sure you want to delete those pictures?'%}")) {
+			 data = {
+				 images: images
+			 }
+			 
+			 $.ajax({
+				 url: "/en/admin/product/delete_product_images/",
+				 type: "POST",
+				 data: data,
+				 headers:{"X-CSRFToken": window.CSRF},
+				 
+				 success: function(data){
+					 if (data.success == true) {
+						 window.location.reload()
+					 }
+				 }
+			 });
+			 
+
+		 }
+	 }); 
+ }());
+ 
+ (function delete_product(){
+	 
+	 $("button.delete_product").on("click", function(e){
+		 
+		 if( confirm("{%trans "are you sure you want to delete product?"%}") ){
+			 $.ajax({
+				 type: "post",
+				 headers: {"X-CSRFToken": window.CSRF },
+				 url: "/en/admin/product/delete/" + $(this).data("id") + "/",
+				 success: function(data){
+					 if(data.success == true){
+						 var noty = new Noty({
+							 
+							 type: "success",
+							 text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i>" + data.message + "</div>",
+							 timeout: 1500,
+							 closeWith: ['button'],
+							 theme: "relax"
+
+						 }).show()
+						 setTimeout(function(){
+							 window.location.href = "/admin/product/";
+						 }, 2000)
+					 }
+				 }
+			 }); //end ajax call
+
+		 } //end confirm
+
+	 });
+	 
+ }());
+
+
+ (function delete_category(){
+	 
+	 $("button.delete_category").on("click", function(e){
+		 
+		 if( confirm("{%trans "are you sure you want to delete category?"%}") ){
+			 $.ajax({
+				 type: "post",
+				 headers: {"X-CSRFToken": window.CSRF },
+				 url: "/en/admin/category/delete/" + $(this).data("id") + "/",
+				 success: function(data){
+					 if(data.success == true){
+						 var noty = new Noty({
+							 
+							 type: "success",
+							 text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i>" + data.message + "</div>",
+							 timeout: 1500,
+							 closeWith: ['button'],
+							 theme: "relax"
+
+						 }).show()
+						 setTimeout(function(){
+							 window.location.href = "/admin/category/";
+						 }, 2000)
+					 }
+				 }
+			 }); //end ajax call
+
+		 } //end confirm
+
+	 });
+	 
+ }());
+
+ (function delete_user(){
+	 
+	 $("button.delete_user").on("click", function(e){
+		 
+		 if( confirm("{%trans "are you sure you want to delete this user?"%}") ){
+			 $.ajax({
+				 type: "post",
+				 headers: {"X-CSRFToken": window.CSRF },
+				 url: "/en/admin/delete/" + $(this).data("id"),
+				 success: function(data){
+					 if(data.success == true){
+						 var noty = new Noty({
+							 
+							 type: "success",
+							 text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i>" + data.message + "</div>",
+							 timeout: 1500,
+							 closeWith: ['button'],
+							 theme: "relax"
+
+						 }).show()
+						 setTimeout(function(){
+							 window.location.href = "/admin/";
+						 }, 2000)
+					 }
+				 }
+			 }); //end ajax call
+
+		 } //end confirm
+
+	 });
+	 
+ }());
+
+ (function delete_client(){
+	 
+	 $("button.delete_client").on("click", function(e){
+		 
+		 if( confirm("{%trans "are you sure you want to delete this client?"%}") ){
+			 $.ajax({
+				 type: "post",
+				 headers: {"X-CSRFToken": window.CSRF },
+				 url: "/en/admin/client/delete/" + $(this).data("id") + "/",
+				 success: function(data){
+					 if(data.success == true){
+						 var noty = new Noty({
+							 
+							 type: "success",
+							 text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i>" + data.message + "</div>",
+							 timeout: 1500,
+							 closeWith: ['button'],
+							 theme: "relax"
+
+						 }).show()
+						 setTimeout(function(){
+							 window.location.href = "/admin/client/";
+						 }, 2000)
+					 }
+				 }
+			 }); //end ajax call
+
+		 } //end confirm
+
+	 });
+	 
+ }());
+ 
+</script>
+
+<script>
+ $(document).ready(function(){
+	 
+	 (function ordering(){
+
+		 function get_sum(){
+			 var sum = 0
+			 $(".quantity_input").each(function(){
+				 sum += $(this).val() * $(this).closest("tr").data("sell_price")
+			 });
+			 
+			 $("p#sum").empty().append(sum)
+			 console.log(sum);
+
+		 }
+		 
+		 $("button.add_product_to_order").on("click", function(){
+			 $("div#categories").height($(window).height());
+			 var closest_tr = $(this).closest("tr");
+			 var orders = $(".orders");
+
+
+			 table_layout_html =`<div class="order_products_wrapper">
+				 <table class='table table-striped order_products'>
+					 <thead>
+						 <th>{%trans "name"%}</th>
+						 <th>{%trans "quantity"%}</th>
+						 <th>{%trans "sell price"%}</th>
+						 <th>{%trans "delete"%}</th>				 
+					 </thead>
+					 <tbody> </tbody>
+				 </table>
+				 <div class="form-group">
+
+sum: <p id="sum" class="h4"></p>
+					 <button class="btn btn-info btn-block form-control"><i class="fa fa-plus"></i>{%trans "add"%}</button>
+				 </div>
+			 </div>`
+
+			 product_tr_html = `<tr data-id ="${closest_tr.data('id')}" data-sell_price = ${closest_tr.data('sell_price')}>
+				 <input name="products[]" type="hidden" value="${closest_tr.data('id')}"/>
+				 <td>${closest_tr.data("name")}</td>
+				 <td><input class="form-control quantity_input" name="quantities[]" type="number" value="1" min='1'/></td>
+				 <td>${closest_tr.data("sell_price")}</td>
+				 <td><button class="btn btn-danger delete_order_product"><i class="fa fa-trash"></i></button></td>
+			 </tr>`
+
+
 		
-		$("img.detailed_product_image").on("click", function(){
-			image_name = $(this).data("name");
+		 
 
-			if (images.indexOf(image_name) == -1) {
-				images.push(image_name);
-				$(this).css({borderColor:  "red", borderWidth: 7, borderStyle: "solid"})
-			}else{
-				images.splice(images.indexOf(image_name), 1);
-				$(this).css("border", "none");
-				
-			}
-		}); //end on
+			 if(orders.find(".order_products").length == 0){
+				 orders.append(table_layout_html);
+				 $("table.order_products tbody").append(product_tr_html);
+				 get_sum();
+			 }else{
+				 
+				 var ex = $("table.order_products tbody").find("tr[data-id='" + closest_tr.data("id") + "']");
+				 if(ex.length == 0){
+					 $("table.order_products tbody").append(product_tr_html)
+					 get_sum();
+				 }
+			 }
 
-		$("div.detailed_product button#delete_selected_images").on("click", function(){
-			if (confirm ("{%trans 'are you sure you want to delete those pictures?'%}")) {
-				data = {
-					images: images
-				}
-				
-				$.ajax({
-					url: "/en/admin/product/delete_product_images/",
-					type: "POST",
-					data: data,
-					headers:{"X-CSRFToken": window.CSRF},
-					
-					success: function(data){
-						if (data.success == true) {
-							window.location.reload()
-						}
-					}
-				});
-				
+		 });
 
-			}
-		}); 
-	}());
+		 $(document).on("click",".delete_order_product", function(){
+			 $(this).closest("tr").remove();
+			 get_sum();
+			 if($("table.order_products tbody").find("tr").length == 0){
+				 $("div.order_products_wrapper").remove();
+				 
+			 }
+		 });
+
+		 $(document).on("change", ".quantity_input", function(){
+			 get_sum();
+		 });
+
+		 
+		 $("form#order_form").on("submit", function(event){
+			 /* event.preventDefault(); */
+			 /* alert("submited") */
+		 });
+	 })();
+ }); /* document ready */
+</script>
+
+
+
+
+
+<script>
+	{%get_current_language as LANG%}
+	var get_products = $(".get_products");
 	
-	(function delete_product(){
+	get_products.on("click", function(){
 		
-		$("button.delete_product").on("click", function(e){
-			
-			if( confirm("{%trans "are you sure you want to delete product?"%}") ){
-				$.ajax({
-					type: "post",
-					headers: {"X-CSRFToken": window.CSRF },
-					url: "/en/admin/product/delete/" + $(this).data("id") + "/",
-					success: function(data){
-						if(data.success == true){
-							var noty = new Noty({
-								
-								type: "success",
-								text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i>" + data.message + "</div>",
-								timeout: 1500,
-								closeWith: ['button'],
-								theme: "relax"
-
-							}).show()
-							setTimeout(function(){
-								window.location.href = "/admin/product/";
-							}, 2000)
-						}
-					}
-				}); //end ajax call
-
-			} //end confirm
-
-		});
+		$("div.products_loading").removeClass("d-none");
+		$.ajax({
+		 	url: "/{{LANG}}/admin/order/" + $(this).data("id") + "/products/",
+		 	type: "get",
+		 	success: function(data){
+		 		$("div#order_products").empty();
+		 		$("div#order_products").append(data.html)
+				$(".products_loading").addClass("d-none");
+		 	},
+		 });
 		
-	}());
+	});
+</script>
 
 
-	(function delete_category(){
-		
-		$("button.delete_category").on("click", function(e){
-			
-			if( confirm("{%trans "are you sure you want to delete category?"%}") ){
-				$.ajax({
-					type: "post",
-					headers: {"X-CSRFToken": window.CSRF },
-					url: "/en/admin/category/delete/" + $(this).data("id"),
-					success: function(data){
-						if(data.success == true){
-							var noty = new Noty({
-								
-								type: "success",
-								text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i>" + data.message + "</div>",
-								timeout: 1500,
-								closeWith: ['button'],
-								theme: "relax"
 
-							}).show()
-							setTimeout(function(){
-								window.location.href = "/admin/category/";
-							}, 2000)
-						}
-					}
-				}); //end ajax call
 
-			} //end confirm
 
-		});
-		
-	}());
 
-	(function delete_user(){
-		
-		$("button.delete_user").on("click", function(e){
-			
-			if( confirm("{%trans "are you sure you want to delete this user?"%}") ){
-				$.ajax({
-					type: "post",
-					headers: {"X-CSRFToken": window.CSRF },
-					url: "/en/admin/delete/" + $(this).data("id"),
-					success: function(data){
-						if(data.success == true){
-							var noty = new Noty({
-								
-								type: "success",
-								text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i>" + data.message + "</div>",
-								timeout: 1500,
-								closeWith: ['button'],
-								theme: "relax"
-
-							}).show()
-							setTimeout(function(){
-								window.location.href = "/admin/";
-							}, 2000)
-						}
-					}
-				}); //end ajax call
-
-			} //end confirm
-
-		});
-		
-	}());
-
-	(function delete_client(){
-		
-		$("button.delete_client").on("click", function(e){
-			
-			if( confirm("{%trans "are you sure you want to delete this client?"%}") ){
-				$.ajax({
-					type: "post",
-					headers: {"X-CSRFToken": window.CSRF },
-					url: "/en/admin/client/delete/" + $(this).data("id") + "/",
-					success: function(data){
-						if(data.success == true){
-							var noty = new Noty({
-								
-								type: "success",
-								text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i>" + data.message + "</div>",
-								timeout: 1500,
-								closeWith: ['button'],
-								theme: "relax"
-
-							}).show()
-							setTimeout(function(){
-								window.location.href = "/admin/client/";
-							}, 2000)
-						}
-					}
-				}); //end ajax call
-
-			} //end confirm
-
-		});
-		
-	}());
-	
-	</script>
 
 
 {%for m in messages%}
@@ -184,27 +302,27 @@
 {%if "error" in m.tags %}
 
 <script>
-	var noty = new Noty({
-		type: "error",
-		text: '{{ m.message}}',
-		timeout: 1500,
-		closeWith: ['button'],
-		theme: "relax"
+ var noty = new Noty({
+	 type: "error",
+	 text: '{{ m.message}}',
+	 timeout: 1500,
+	 closeWith: ['button'],
+	 theme: "relax"
 
-	}).show()
+ }).show()
 </script>
 {%elif "success in m.tags"%}
 <script>
-	var noty = new Noty({
-		type: "success",
-		text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i> {{m.message}} </div>",
-		timeout: 1500,
-		closeWith: ['button'],
-		theme: "relax",
-		
-	}).show()
+ var noty = new Noty({
+	 type: "success",
+	 text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i> {{m.message}} </div>",
+	 timeout: 1500,
+	 closeWith: ['button'],
+	 theme: "relax",
+	 
+ }).show()
 
-	</script>
+</script>
 
 {%endif%}
 {%endfor%}

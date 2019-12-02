@@ -6,8 +6,4 @@ $(document).ready(function(){
 		$("a[data-widget='pushmenu']").click()
 	}
 	
-
-		// $("#all_products").datatable({
-			
-		// });
 });

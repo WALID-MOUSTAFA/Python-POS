@@ -31,3 +31,13 @@ body{
 #all_users table tbody tr{
 	cursor: pointer;
 }
+
+button[disabled], li.disabled{
+	cursor: not-allowed;
+	
+}
+
+.card-tools {
+	left: initial !important;
+	right: initial !important;
+}

@@ -1,0 +1,114 @@
+{%extends "partials/main-layout.html" %}
+{%load i18n users_extras%}
+{%block content%}
+
+	{%user_allowed "edit_client" as allow_edit_client%}
+	{%user_allowed "delete_client" as allow_delete_client%}
+	{%user_allowed "create_client" as allow_create_client%}
+	{%user_allowed "read_client" as allow_show_client%}
+
+
+
+	<div class="container p-1" id="" style="">
+
+		<div class="row">
+			
+			<div class="col-md-7 mt-5 card">
+				<div class="card-body">
+
+
+					<div class="float-left">
+						<form class="inline-form" method="get" action=".">
+							<div class="row">
+								<input class="form-control d-inline col-8 " name="q" type="text" value="{{request.GET.q}}"/>
+								<button class="btn btn-primary col-3 offset-1" >{%trans "search"%}</button>
+							</div>
+						</form>
+					</div>
+
+					<div class="clearfix"></div>
+					
+					{%if orders%}
+						
+						<table id="all_clients" class="table text-center  table-hover" style="overflow:hidden">
+							<thead class="">
+								<tr>
+									<th>{%trans "client name"%}</th>
+									<th>{%trans "create date"%}</th>
+									<th>{%trans "price"%}</th>
+									<th>{%trans "actions"%}</th>
+								</tr>
+							</thead>
+							
+							
+							<tbody>
+
+								{%for c in orders%}
+									
+									<tr>
+										<td>{{c.client.name}}</td>
+										<td>{{c.created_date}}</td>
+										{%for id, price in prices_list.items %} {%if id == c.id %}
+											<td>{{price}}</td>
+										{%endif%} {%endfor%}
+										<td class="row justify-content-around">
+											
+											<a  data-id="{{c.id}}" href="#" class="get_products ">
+												<button
+													data-user_id="{{u.id}}"
+													class="btn btn-primary user_show  ">
+													<i class="fa fa-eye"></i>
+													{%trans "show"%}
+												</button>
+											</a>
+
+											<a class="" href="/admin/client/edit/{{c.id}}">
+												<button	{%if not allow_edit_client%} disabled {%endif%}
+
+													class="btn btn-info ">
+													<i class="fas fa-edit"></i>
+													{%trans "edit"%}
+												</button>
+											</a>
+
+											<button data-id="{{c.id}}"
+													{%if not allow_delete_client%} disabled {%endif%}
+													class="btn btn-danger delete_client ">
+												<i class="far fa-trash-alt"></i>
+												{%trans "delete"%}
+
+											</button>
+
+										</td>
+
+
+									</tr>
+								{%endfor%}
+							</tbody>
+						</table>
+						
+						{%include "partials/pagination.html" with model=orders%}
+
+					{%else%}
+						<p class="h1">{%trans "there is no records"%}</p>
+					{%endif%}
+
+				</div>
+			</div>
+
+			<div style="position:relative" class="col-md-4 offset-md-1 mt-5 card" >
+				<div class="products_loading d-none  overlay"  >
+					<i class="fas fa-4x fa-sync-alt fa-spin"></i>
+				</div>
+				<p class="h3 card-header">{%trans "products"%}</p>
+				<div  id="order_products"></div>
+			</div>
+
+
+		</div>
+
+		
+	</div>
+
+
+{%endblock content%}

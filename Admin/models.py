@@ -49,11 +49,22 @@ class Admin (models.Model):
 class Category(models.Model):
     id = models.BigAutoField(primary_key = True)
     desc_image = models.TextField(null = True)
-    
-    
+     
     class Meta:
         db_table = "categories"
 
+    
+    @classmethod
+    def related_products(self, id):
+
+        related_products_id_list = Product.objects.prefetch_related("category").filter(category__id=int(id)).values_list("id", flat=True) 
+        result =  {
+            "en": Product_translation.objects.prefetch_related("product").filter(product__id__in=related_products_id_list, language="en"),
+            "ar": Product_translation.objects.prefetch_related("product").filter(product__id__in=related_products_id_list, language="ar"),
+            "images": Product_images.objects.prefetch_related("product").filter(product__id__in=related_products_id_list)
+        }
+        return result
+   
 
 
 class Category_translation(models.Model):
@@ -74,7 +85,8 @@ class Product(models.Model):
     buy_price = models.TextField(null = True)
     sell_price = models.TextField(null = True);
     available_quantity = models.TextField(null = True)
-    
+
+        
     class Meta:
         db_table = "products"
 
@@ -86,10 +98,12 @@ class Product_translation(models.Model):
     desc = models.TextField()
     language = models.CharField(max_length = 255, default = "en")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    
+
+
     class Meta:
         db_table = "product_translation"
 
+        
         
 class Product_images(models.Model):
     id= models.BigAutoField(primary_key = True)
@@ -111,3 +125,22 @@ class Client(models.Model):
 
     class Meta:
         db_table = "clients"
+
+
+class Order(models.Model):
+    id = models.BigAutoField(primary_key = True)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    product = models.ManyToManyField(Product, through="Order_product")
+    created_date = models.DateField(auto_now_add=True,null= True)
+
+    class Meta:
+        db_table = "orders"
+        managed=True
+        
+class Order_product(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.CharField(max_length=253)
+    
+    class Meta:
+        db_table="order_product"

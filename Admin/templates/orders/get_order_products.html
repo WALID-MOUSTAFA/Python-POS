@@ -1,0 +1,44 @@
+{%load i18n%}
+<table class="table bg-navy table-bordered">
+	<thead>
+		<th>#</th>
+		<th>{%trans "name"%}</th>
+		<th>{%trans "sell price"%}</th>
+		<th>{%trans "quantity"%}</th>
+	</thead>
+	<tbod>
+		
+		{%for p in order.product.all%}
+
+			<tr>
+
+				{%for pt in products%}
+
+					{%if p.id == pt.product.id%}
+						<td>{{forloop.counter}}</td>
+						<td>{{pt.name}}</td>
+
+						<td>{{pt.product.sell_price}}</td>
+
+						{%for or_prod in order_products%}
+
+							{%if or_prod.product_id == p.id%}
+
+								<td>{{or_prod.quantity}}</td>
+
+							{%endif%}
+
+						{%endfor%}
+
+					{%endif%}
+
+				{%endfor%}
+				
+			</tr>
+			
+		{%endfor%}
+
+	</tbod>
+	
+</table>
+<p class="h2">sum:{{sum}} </p>

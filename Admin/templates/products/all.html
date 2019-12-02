@@ -35,7 +35,7 @@
 				<form class="inline-form" method="get" action=".">
 					<div class="row">
 						<input class="form-control d-inline col-8 " name="q" type="text" value="{{request.GET.q}}"/>
-						<button class="btn btn-primary col-3 offset-1" >{%trans "search"%}</button>
+						<button class="btn btn-primary col-3 offset-1 d-flex"> <i class="fa fa-search align-self-center "> </i> {%trans "search"%}</button>
 					</div>
 				</form>
 
@@ -50,8 +50,6 @@
 					<tr>
 						<th>{%trans "product name"%}</th>
 						<th>{%trans "product description"%}</th>
-						<!-- <th>{%trans "product name in arabic"%}</th> -->
-						<!-- <th>{%trans "product description in arabic"%}</th> -->
 						<th>{%trans "category" %} </th>
 						<th>{%trans "buy price"%}</th>
 						<th>{%trans "sell price"%}</th>
@@ -66,16 +64,13 @@
 					
 					<tr>
 
-						
-						
 						{%for pt in products_trans%}
 						{%if pt.product.id == p.id%}
 						<td>{{pt.name}}</td>
 						<td>{{pt.desc}}</td>
 						{%endif%}
 						{%endfor%}
-						
-						
+
 						<td>
 							{%for c_trans in category_translation %}
 							{%if c_trans.Category.id == p.category.id and c_trans.language == LANG%}
@@ -116,7 +111,7 @@
 										</button>
 									</a>
 								</div>
-								<div class="col-12 mb-1"> 
+								<div class="col-12 mb-1">
 									<a href="/admin/product/edit/{{p.id}}">
 										<button
 											{%if not allow_edit_product%} disabled {%endif%}
@@ -150,7 +145,7 @@
 			{%include "partials/pagination.html" with model=products %}
 			
 
-			{%else%} 
+			{%else%}
 			<p class="h1">{%trans "there is no records"%}</p>
 			{%endif%} <!-- end if products -->
 			

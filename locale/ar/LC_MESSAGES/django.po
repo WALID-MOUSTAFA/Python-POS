@@ -245,6 +245,10 @@ msgid "sell price"
 msgstr "سعر البيع"
 
 
+msgid "available products"
+msgstr "المنتجات المتاحة"
+
+
 msgid "description images"
 msgstr "الصور الوصفية"
 
