@@ -11,7 +11,7 @@
 
 <div class="container p-1" id="all_users" style="">
 	<div class="mt-5 card">
-		<div class="card-body table-responsive">
+		<div class="card-body">
 
 			<div class="mb-5 float-right">
 				<a href="/admin/client/add">
@@ -32,8 +32,8 @@
 			<div class="clearfix"></div>
 
 			{%if clients%}
-			<table id="all_clients" class="table text-center" style="overflow:hidden">
-				<thead class="bg-primary">
+			<table id="all_clients" class="table text-center table-hover" style="overflow:hidden">
+				<thead class="bg-light">
 					<tr>
 						<th>{%trans "name"%}</th>
 						<th>{%trans "address"%}</th>

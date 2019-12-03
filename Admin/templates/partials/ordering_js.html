@@ -1,0 +1,113 @@
+{%load i18n%}
+<script>
+	$(document).ready(function(){
+		
+		(function ordering(){
+
+			function get_sum(){
+				var sum = 0
+				$(".quantity_input").each(function(){
+					sum += $(this).val() * $(this).closest("tr").data("sell_price")
+				});
+				
+				$("p#sum").empty().append(sum)
+				console.log(sum);
+
+			}
+			
+			$("button.add_product_to_order").on("click", function(){
+				$("div#categories").height($(window).height());
+				var closest_tr = $(this).closest("tr");
+				var orders = $(".orders");
+
+
+				table_layout_html =`<div class="order_products_wrapper">
+				 <table class='table table-striped order_products'>
+					 <thead>
+						 <th>{%trans "name"%}</th>
+						 <th>{%trans "quantity"%}</th>
+						 <th>{%trans "sell price"%}</th>
+						 <th>{%trans "delete"%}</th>				 
+					 </thead>
+					 <tbody> </tbody>
+				 </table>
+				 <div class="form-group">
+
+sum: <p id="sum" class="h4"></p>
+					 <button class="btn btn-info btn-block form-control"><i class="fa fa-plus"></i>{%trans "add"%}</button>
+				 </div>
+			 </div>`
+
+				product_tr_html = `<tr data-id ="${closest_tr.data('id')}" data-sell_price = ${closest_tr.data('sell_price')}>
+				 <input name="products[]" type="hidden" value="${closest_tr.data('id')}"/>
+				 <td>${closest_tr.data("name")}</td>
+				 <td><input class="form-control quantity_input" name="quantities[]" type="number" value="1" min='1'/></td>
+				 <td>${closest_tr.data("sell_price")}</td>
+				 <td><button class="btn btn-danger delete_order_product"><i class="fa fa-trash"></i></button></td>
+			 </tr>`
+
+
+				
+				
+
+				if(orders.find(".order_products").length == 0){
+					orders.append(table_layout_html);
+					$("table.order_products tbody").append(product_tr_html);
+					get_sum();
+				}else{
+					
+					var ex = $("table.order_products tbody").find("tr[data-id='" + closest_tr.data("id") + "']");
+					if(ex.length == 0){
+						$("table.order_products tbody").append(product_tr_html)
+						get_sum();
+					}
+				}
+
+			});
+
+			$(document).on("click",".delete_order_product", function(){
+				$(this).closest("tr").remove();
+				get_sum();
+				if($("table.order_products tbody").find("tr").length == 0){
+					$("div.order_products_wrapper").remove();
+					
+				}
+			});
+
+			$(document).on("change", ".quantity_input", function(){
+				get_sum();
+			});
+
+			
+			$("form#order_form").on("submit", function(event){
+				/* event.preventDefault(); */
+				/* alert("submited") */
+			});
+		})();
+	}); /* document ready */
+	</script>
+
+
+
+
+
+<script>
+	{%get_current_language as LANG%}
+	var get_products = $(".get_products");
+	
+	get_products.on("click", function(){
+		
+		$("div.products_loading").removeClass("d-none");
+		$.ajax({
+		 	url: "/{{LANG}}/admin/order/" + $(this).data("id") + "/products/",
+		 	type: "get",
+		 	success: function(data){
+		 		$("div#order_products").empty();
+		 		$("div#order_products").append(data.html)
+				$(".products_loading").addClass("d-none");
+		 	},
+		});
+		
+	});
+</script>
+

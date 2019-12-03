@@ -1,5 +1,6 @@
 import logging
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
+from django.contrib import messages
 from django.http import JsonResponse
 from .models import Client, Category, Category_translation, Product_translation, Order, Product, Order_product
 from django.core.exceptions import ObjectDoesNotExist
@@ -9,9 +10,18 @@ from django.template.loader import render_to_string
 from django.core.paginator import Paginator
 
 def index_order(request):
+
     ctx = {}
     per_page = 3
-    orders = Paginator(Order.objects.prefetch_related("client", "product").all(), per_page).get_page(request.GET.get("page",1))
+    if request.GET.get("q", None) != None:
+        q = request.GET.get("q", "")
+        orders = Paginator (Order.objects.prefetch_related("client", "product") \
+                            .filter(client__name__contains=q) , per_page) \
+                            .get_page(request.GET.get("page",1)
+                            )
+    else:
+        orders = Paginator(Order.objects.prefetch_related("client", "product").all(), per_page).get_page(request.GET.get("page",1))
+
     prices_list = {}
     sum = 0
 
@@ -70,7 +80,7 @@ def get_products_order(request, order_id):
     return JsonResponse(response)
 
     
-##############################################################################
+#########################################################################################################################
 
 def create_order(request, client_id):
     ctx = {}
@@ -102,9 +112,67 @@ def create_order(request, client_id):
         order.save()
 
         for k,v  in order_request.items():
+
+            product = Product.objects.get(id = k)
+            product.available_quantity = int(product.available_quantity) - int(v)
+            product.save()
+            
             Order_product.objects.create(
                 order = order,
                 product = Product.objects.get(id = k),
                 quantity = v,
             )
-        return HttpResponse("response")
+        messages.success(request, _("order created successfully"))    
+        return redirect("/admin/order/all")
+
+
+
+#########################################################################################################################
+
+
+def edit_order(request, order_id):
+    ctx = {}
+    
+    if request.method == "GET":
+        return render(request, "orders/edit.html", ctx)
+
+    elif request.method == "POST":
+        pass
+    
+
+
+
+def delete_order(request, order_id):
+
+    if request.method == "POST":
+        try:
+            order = Order.objects.prefetch_related("product").get(id= order_id)
+        except ObjectDoesNotExist:
+            return HttpResponse("no order found")
+        
+        
+        for product in order.product.all():
+            product.available_quantity = int(product.available_quantity) + int(Order_product.objects.get(product_id = product.id, order_id = order_id).quantity) 
+            product.save()
+
+
+        if order.delete():
+
+            response = {
+                "success": True,
+                "message": _("order deleted successfully")
+            }
+        else:
+            response = {
+                "success": False,
+                "message": _("error, can't delete order")
+            }
+
+            
+        return JsonResponse(response)
+
+    else:
+        return JsonResponse({
+            "success": False,
+            "message": "methd not allowed"
+        }, status=405)

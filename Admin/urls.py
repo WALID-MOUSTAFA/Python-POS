@@ -65,7 +65,9 @@ clients_urlpatterns = [
 orders_urlpatterns = [
     path("/", order_views.index_order),
     path("/all", order_views.index_order),
-    path("/<int:order_id>/products/", order_views.get_products_order)
+    path("/<int:order_id>/products/", order_views.get_products_order),
+    path("/edit/<int:order_id>/", order_views.edit_order),
+    path("/delete/<int:order_id>/", order_views.delete_order),
 ]
 
 urlpatterns = [

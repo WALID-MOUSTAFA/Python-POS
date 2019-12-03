@@ -65,6 +65,10 @@ msgid "None"
 msgstr "لا يوجد"
 
 
+msgid "price"
+msgstr "السعر"
+
+
 
 ###############################################################
 
@@ -267,6 +271,15 @@ msgstr "تعديل صور المنتج"
 msgid "confirm delete"
 msgstr "تأكيد الحذف"
 
+
+msgid "product updated successfully"
+msgstr "تم تعديل المنتج بنجاح"
+
+
+msgid "product deleted successfully"
+msgstr "تم حذف المنتج بنجاح"
+
+
 msgid "are you sure you want to delete those pictures?"
 msgstr "هل أنت واثق من حذف هذه الصور؟"
 
@@ -279,10 +292,17 @@ msgstr "هل أنت واثق من حذف هذا المستخدم نهائيا؟"
 msgid "are you sure you want to delete category?"
 msgstr "هل أنت واثق من حذف هذه الفئة؟"
 
+
+
 ###################################clients###########################
 
 msgid "clients"
 msgstr "العملاء"
+
+
+msgid "client name"
+msgstr "اسم العميل"
+
 
 msgid "there is no records"
 msgstr "لا يوجد سجلات"
@@ -302,14 +322,21 @@ msgstr "تم حذف العميل بنجاح"
 msgid "client added successfully"
 msgstr "تم إضافة العميل بنجاح"
 
-# msgid ""
-# msgstr ""
+msgid "are you sure you want to delete this client?"
+msgstr "هل أنت متأكد من حذف هذا العميل؟"
 
-# msgid ""
-# msgstr ""
 
-# msgid ""
-# msgstr ""
+###################################clients###########################
+
+
+msgid "order"
+msgstr "الطلبات"
+
+msgid "orders"
+msgstr "طلبات"
+
+msgid "created date"
+msgstr "وقت الإضافة"
 
 # msgid ""
 # msgstr ""

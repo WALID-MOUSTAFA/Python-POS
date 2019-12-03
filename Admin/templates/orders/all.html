@@ -13,7 +13,7 @@
 
 		<div class="row">
 			
-			<div class="col-md-7 mt-5 card">
+			<div class="col-xl-7 mt-5 card">
 				<div class="card-body">
 
 
@@ -21,7 +21,7 @@
 						<form class="inline-form" method="get" action=".">
 							<div class="row">
 								<input class="form-control d-inline col-8 " name="q" type="text" value="{{request.GET.q}}"/>
-								<button class="btn btn-primary col-3 offset-1" >{%trans "search"%}</button>
+								<button class="btn flat btn-primary col-3 offset-1" >{%trans "search"%}</button>
 							</div>
 						</form>
 					</div>
@@ -30,11 +30,12 @@
 					
 					{%if orders%}
 						
-						<table id="all_clients" class="table text-center  table-hover" style="overflow:hidden">
-							<thead class="">
+						<table id="all_clients" class="table text-center mt-3 table-hover" style="overflow:hidden">
+							<thead class="bg-light">
 								<tr>
+									<th>#</th>
 									<th>{%trans "client name"%}</th>
-									<th>{%trans "create date"%}</th>
+									<th>{%trans "created date"%}</th>
 									<th>{%trans "price"%}</th>
 									<th>{%trans "actions"%}</th>
 								</tr>
@@ -43,39 +44,40 @@
 							
 							<tbody>
 
-								{%for c in orders%}
+								{%for o in orders%}
 									
-									<tr>
-										<td>{{c.client.name}}</td>
-										<td>{{c.created_date}}</td>
-										{%for id, price in prices_list.items %} {%if id == c.id %}
+								<tr>
+									<td>{{forloop.counter}}</td>
+										<td>{{o.client.name}}</td>
+										<td>{{o.created_date}}</td>
+										{%for id, price in prices_list.items %} {%if id == o.id %}
 											<td>{{price}}</td>
 										{%endif%} {%endfor%}
 										<td class="row justify-content-around">
 											
-											<a  data-id="{{c.id}}" href="#" class="get_products ">
+											<a  data-id="{{o.id}}" href="javascript:(void)" class="get_products ">
 												<button
-													data-user_id="{{u.id}}"
-													class="btn btn-primary user_show  ">
+													
+													class="btn flat btn-primary   ">
 													<i class="fa fa-eye"></i>
-													{%trans "show"%}
+													{%trans ""%}
 												</button>
 											</a>
 
-											<a class="" href="/admin/client/edit/{{c.id}}">
+											<a class="" href="/admin/order/edit/{{o.id}}">
 												<button	{%if not allow_edit_client%} disabled {%endif%}
 
-													class="btn btn-info ">
+													class="btn flat btn-info ">
 													<i class="fas fa-edit"></i>
-													{%trans "edit"%}
+													{%trans ""%}
 												</button>
 											</a>
 
-											<button data-id="{{c.id}}"
+											<button data-id="{{o.id}}"
 													{%if not allow_delete_client%} disabled {%endif%}
-													class="btn btn-danger delete_client ">
+													class="btn  flat btn-danger delete_order ">
 												<i class="far fa-trash-alt"></i>
-												{%trans "delete"%}
+												{%trans ""%}
 
 											</button>
 
@@ -96,7 +98,7 @@
 				</div>
 			</div>
 
-			<div style="position:relative" class="col-md-4 offset-md-1 mt-5 card" >
+			<div style="position:relative" class="col-xl-4 offset-xl-1 mt-5 card" >
 				<div class="products_loading d-none  overlay"  >
 					<i class="fas fa-4x fa-sync-alt fa-spin"></i>
 				</div>

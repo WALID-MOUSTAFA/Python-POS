@@ -1,6 +1,6 @@
 {%load i18n%}
-<table class="table bg-navy table-bordered">
-	<thead>
+<table class="table  table-hover ">
+	<thead class="bg-gradient-dark">
 		<th>#</th>
 		<th>{%trans "name"%}</th>
 		<th>{%trans "sell price"%}</th>
@@ -32,13 +32,18 @@
 
 					{%endif%}
 
-				{%endfor%}
-				
+								{%endfor%}
+								
 			</tr>
 			
-		{%endfor%}
+			{%endfor%}
 
 	</tbod>
-	
+	<tfoot class="bg-gradient-secondary">
+		<tr>
+			<td colspan=2><p class="h2">{%trans "price"%}  </p></td>
+			<td colspan=2><p class="h2">{{sum}}</p> </td>
+		</tr>
+	</tfoot>
 </table>
-<p class="h2">sum:{{sum}} </p>
+

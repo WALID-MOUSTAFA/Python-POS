@@ -242,7 +242,7 @@ def edit_product(request, id):
                             dest.write(j)
                         dest.close()
 
-            messages.success(request, _("product edited successfully"))
+            messages.success(request, _("product updated successfully"))
             return redirect("/admin/product/")
             
 

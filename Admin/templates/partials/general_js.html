@@ -1,0 +1,31 @@
+{%load i18n%}
+{%for m in messages%}
+
+{%if "error" in m.tags %}
+
+<script>
+	var noty = new Noty({
+		type: "error",
+		text: '{{ m.message}}',
+		timeout: 1500,
+		closeWith: ['button'],
+		theme: "relax"
+
+	}).show()
+</script>
+{%elif "success in m.tags"%}
+<script>
+	var noty = new Noty({
+		type: "success",
+		text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i> {{m.message}} </div>",
+		timeout: 1500,
+		closeWith: ['button'],
+		theme: "relax",
+		
+	}).show()
+
+	</script>
+
+{%endif%}
+{%endfor%}
+
