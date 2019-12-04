@@ -12,7 +12,7 @@
 	<div class="row">
 
 		<!-- categories -->
-		<div id="categories" class="card col-md-6" style="overflow:scroll">
+		<div id="categories" class="card col-xl-6" style="overflow:scroll">
 			
 			<p class="h3 m-2">{%trans "categories"%}</p>
 			
@@ -21,7 +21,7 @@
 			{%related_products ct.Category.id as related_prods%}
 
 			{%if not related_prods.en.count == 0%}
-			<div class="card card-info m-4">
+			<div class="card card-info collapsed-card m-4">
 				
 				<div class="card-header">
 					<h3 class="card-title">{{ct.name}}</h3>
@@ -34,8 +34,8 @@
 				</div>
 				
 				<div class="card-body">
-					<table class="table table-striped table-hover">
-						<thead>
+					<table class="table table-bordered" style="overflow:scroll">
+						<thead class="bg-info">
 							<th>{%trans "name"%}</th>
 							<th>{%trans "available quantity"%}</th>
 							<th>{%trans "sell price"%}</th>
@@ -46,14 +46,16 @@
 					{%if LANG == "en"%}
 					
 					{%for i in related_prods.en%}
-					<tr class="related_product" data-name="{{i.name}}" data-id="{{i.product.id}}" data-sell_price = "{{i.product.sell_price}}" data-quantity="{{i.product.quantity}}">
+					<tr class="related_product" data-name="{{i.name}}" data-id="{{i.product.id}}" data-sell_price = "{{i.product.sell_price}}" data-quantity="{{i.product.available_quantity}}">
 						<td>
 							{{i.name}}
 						</td>
 						<td>{{i.product.available_quantity}}</td>
 						<td>{{i.product.sell_price}}</td>
 						<td>
-							<button class="btn btn-success add_product_to_order">
+							<button
+								class="btn flat btn-success add_product_to_order"
+									   {%if i.product.available_quantity == 0 or i.product.available_quantity == None%} disabled {%endif%} >
 								<i class="fa fa-plus"></i>
 							</button>
 						</td>
@@ -70,7 +72,9 @@
 						<td>{{i.product.available_quantity}}</td>
 						<td>{{i.product.sell_price}}</td>
 						<td>
-							<button class="btn btn-success add_product_to_order">
+							<button class="btn flat  btn-success add_product_to_order"
+									{%if i.product.available_quantity == 0 or i.product.available_quantity == None%} disabled {%endif%}
+							>
 								<i class="fa fa-plus"></i>
 							</button>
 						</td>
@@ -92,21 +96,19 @@
 		</div>
 
 		<!-- orders -->
-		<div class="col-md-6">
+		<div class="col-xl-6">
 			
 			<div class="card">
 				<p class="h3 m-2">{%trans "orders"%}</p>
 				<form id="order_form" action="" method="post">
 					{%csrf_token%}
 					<div class="orders">
-
 					</div>
-					
-				
 					
 				</form>
 			</div>
 		</div>
-	</div>
+		</div>
+	
 </div>
 {%endblock content%}

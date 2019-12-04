@@ -74,8 +74,8 @@ def get_products_order(request, order_id):
         "html"   : html
     }
 
-    from django.db import connection
-    pprint(connection.queries)
+    # from django.db import connection
+    # pprint(connection.queries)
     
     return JsonResponse(response)
 
@@ -115,6 +115,10 @@ def create_order(request, client_id):
 
             product = Product.objects.get(id = k)
             product.available_quantity = int(product.available_quantity) - int(v)
+            if product.available_quantity < 0:
+                prod_name = Product_translation.objects.get(product=product, language = get_language()).name
+                messages.error(request, _("prouct has no enough available quantity"))
+                return redirect(request.META.get('HTTP_REFERER'))
             product.save()
             
             Order_product.objects.create(
@@ -132,12 +136,93 @@ def create_order(request, client_id):
 
 def edit_order(request, order_id):
     ctx = {}
+
+    categories = Category.objects.all()
+
+    categories_translation =  Category_translation.objects.prefetch_related("Category").filter(language= str(get_language()))
+
+    try:
+        order = Order.objects.prefetch_related("order_product_set", "product").get(id=order_id)    
+    except ObjectDoesNotExist:
+        return render(request, "404.html")
+    
+
+    client = order.client
+    
+    related_products = order.product.all() 
+
+    products_translations = Product_translation.objects.prefetch_related("product").filter(product__in= related_products, language= get_language())
+
+
+    ctx["order"] = order
+    
+    ctx["categories"] = categories
+
+    ctx["categories_translation"] = categories_translation
+
+    ctx["products"] = products_translations
     
     if request.method == "GET":
         return render(request, "orders/edit.html", ctx)
 
     elif request.method == "POST":
-        pass
+        
+        #delete the old order
+        for product in order.product.all():
+            product.available_quantity = int(product.available_quantity) + int(Order_product.objects.get(product_id = product.id, order_id = order_id).quantity) 
+            product.save()
+            order.product.remove(product)
+            
+        
+
+        #create the new order
+        products = request.POST.getlist("products[]")
+        quantities = request.POST.getlist("quantities[]")
+        order_request = dict(zip(products, quantities))
+
+        order.client = client
+        order.save()
+
+        for k,v  in order_request.items():
+
+            product = Product.objects.get(id = k)
+            product.available_quantity = int(product.available_quantity) - int(v)
+            if product.available_quantity < 0:
+                prod_name = Product_translation.objects.get(product=product, language = get_language()).name
+                messages.error(request, _("prouct has no enough available quantity"))
+                return redirect("/admin/order/")
+
+            product.save()
+            
+            Order_product.objects.create(
+                order = order,
+                product = Product.objects.get(id = k),
+                quantity = v,
+            )
+        messages.success(request, _("order updated successfully"))    
+        return redirect("/admin/order/")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
     
 
 

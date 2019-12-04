@@ -1,5 +1,5 @@
 {%extends "partials/main-layout.html"%}
-{%load i18n users_extras%}
+{%load i18n users_extras db_extras%}
 {%block content%}
 
 {%user_allowed "edit_category" as allow_edit_category%}
@@ -8,55 +8,158 @@
 {%user_allowed "show_category" as allow_show_category%}
 
 
-<div class="form-wrapper container" style="width: 80%; padding: 1px">
+<div class="form-wrapper container-fluid" style="width: 80%; padding: 1px">
 
 	
 	<div class="text-center mt-4">
-		<div class="text-center h3">{%trans "edit client"%}</div>
+		<div class="text-center h3">{%trans "edit order"%}</div>
 	</div>
 	
-	<div class="card  card-primary mt-5">
+
+<div class="row">
+
+	<!-- categories -->
+	
+		<div id="categories" class="card col-xl-6" style="overflow:scroll">
+			
+			<p class="h3 m-2">{%trans "categories"%}</p>
+			
+			{%for ct in categories_translation%}
+			
+			{%related_products ct.Category.id as related_prods%}
+
+			{%if not related_prods.en.count == 0%}
+
+			<div class="category card card-info collapsed-card m-4">
+				
+				<div class="card-header">
+					<h3 class="card-title">{{ct.name}}</h3>
+
+					<div class="d-block card-tools ml-auto">
+						<button type="button" class="btn btn-tool" data-card-widget="collapse">
+							<i class="fas fa-plus"></i>
+						</button>
+					</div>
+				</div>
+				
+				<div class="card-body">
+					<table class="table table-bordered" style="overflow:scroll">
+						<thead class="bg-info">
+							<th>{%trans "name"%}</th>
+							<th>{%trans "available quantity"%}</th>
+							<th>{%trans "sell price"%}</th>
+							<th>{%trans "add"%}</th>
+						</thead>
+						<tbody>
+							
+					{%if LANG == "en"%}
+					
+					{%for i in related_prods.en%}
+					<tr class="related_product" data-name="{{i.name}}" data-id="{{i.product.id}}" data-sell_price = "{{i.product.sell_price}}" data-quantity="{{i.product.available_quantity}}">
+						<td>
+							{{i.name}}
+						</td>
+						<td>{{i.product.available_quantity}}</td>
+						<td>{{i.product.sell_price}}</td>
+						<td>
+							<button class="btn flat btn-success add_product_to_order"
+									{%if i.product.available_quantity == 0 or i.product.available_quantity == None%} disabled {%endif%} >
 
 		
-		<div class="card-body">
+								<i class="fa fa-plus"></i>
+							</button>
+						</td>
+					</tr>
+					{%endfor%}
 
-
-
-			{#%include "partials/form_error.html"%#}
-			
-			
-		<!-- 	<form role="form" method="POST" action="" enctype="multipart/form-data"> -->
-		<!-- 		{%csrf_token%} -->
-		<!-- 		<div class="form-group"> -->
-		<!-- 			<label for="name"> {% trans "name"  %} : </label> -->
-		<!-- 			<p class="h5 text-danger">{{form.name.errors.as_text}}</p> -->
-		<!-- 			<input type="text" class="form-control" id="name" name="name" placeholder="" value="{{client.name}}"> -->
-		<!-- 		</div> -->
-
-				
-		<!-- 		<div class="form-group"> -->
-		<!-- 			<p class="h5 text-danger">{{form.address.errors.as_text}}</p> -->
-
-		<!-- 			<label for="name"> {% trans "address" %} : </label> -->
+					{%else%}
 					
-		<!-- 			<textarea type="text" class="form-control" name="address" placeholder="">{{client.address}}</textarea> -->
-		<!-- 		</div> -->
+					{%for i in related_prods.ar%}
+					<tr class="related_product" data-name="{{i.name}}" data-id="{{i.product.id}}" data-sell_price = "{{i.product.sell_price}}" data-quantity="{{i.product.quantity}}">
+						<td>
+							{{i.name}}
+						</td>
+						<td>{{i.product.available_quantity}}</td>
+						<td>{{i.product.sell_price}}</td>
+						<td>
+							<button class="btn flat  btn-success add_product_to_order"
+									{%if i.product.available_quantity == 0 or i.product.available_quantity == None%} disabled {%endif%} >
 
-				
-		<!-- 		<div class="form-group"> -->
-		<!-- 			<p class="h5 text-danger">{{form.phone.errors.as_text}}</p> -->
+									
+								<i class="fa fa-plus"></i>
+							</button>
+						</td>
+					</tr>
+					{%endfor%}
 
-		<!-- 			<label for="full-username">{%trans 'phone'%} : </label> -->
-		<!-- 			<input type="text" class="form-control" id="phone" name="phone" placeholder="" value="{{client.phone}}"  > -->
-		<!-- 		</div> -->
+					{%endif%}
+					
+						</tbody>
+					</table>
+					
+				</div> <!-- end card body -->
+			</div>
+			{%endif%}
+			
+			{%endfor%}
 
-
-		<!-- 		<button type="submit" class="btn btn-primary float-right"><i class="fa fa-plus"></i> {%trans "edit"%}</button> -->
-		<!-- 	</form> -->
-
-
-
+			
 		</div>
-	</div>
+
+		<!-- orders -->
+		<div class="col-xl-5">
+			
+			<div class="card">
+				<p class="h3 m-2">{%trans "orders"%}</p>
+
+				<form id="order_form" action="" method="post">
+					{%csrf_token%}
+					<div class="orders">
+						
+						<table class='table table-striped order_products'>
+							<thead>
+								<th>{%trans "name"%}</th>
+								<th>{%trans "quantity"%}</th>
+								<th>{%trans "sell price"%}</th>
+								<th>{%trans "delete"%}</th>				 
+							</thead>
+							<tbody>
+
+								{%for pt in products%}
+								<tr data-id="{{pt.product.id}}" data-sell_price="{{pt.product.sell_price}}" >
+									<input name="products[]" type="hidden" value="{{pt.product.id}}"/>
+	
+									<td>{{pt.name}}</td>
+
+									{%for op in order.order_product_set.all %}
+									{%if op.product_id == pt.product.id%}
+									
+									<td><input required class="form-control quantity_input"  name="quantities[]" type="number" min="1" value="{{op.quantity}}"/> </td>
+									
+									{%endif%}
+									{%endfor%}
+
+									<td>{{pt.product.sell_price}}</td>
+									<td><button class="btn btn-danger delete_order_product"><i class="fa fa-trash"></i></button></td>
+
+
+								</tr>
+								{%endfor%}
+							</tbody>
+						</table>
+						<div class="form-group">
+
+							sum: <p id="sum" class="h4"></p>
+							<button class="btn btn-info btn-block form-control"><i class="fa fa-plus"></i>{%trans "add"%}</button>
+						</div>
+					</div>
+			</div>
+			
+			</form>
+		</div>
+		</div>
+		</div>
+	
+	
 </div>
 {%endblock content%}

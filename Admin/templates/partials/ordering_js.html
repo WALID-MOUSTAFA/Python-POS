@@ -15,7 +15,28 @@
 
 			}
 			
+			function add_disabled(button, tr){
+		
+				
+				var ex = $("table.order_products tbody").find("tr[data-id='" + tr.data("id") + "']");
+				if (ex.length == 0) {
+					button.prop("disabled", false);
+					console.log("not disabled");
+				}
+				if (ex.length != 0) {
+					button.prop("disabled", true);
+					console.log("disabled");
+				}
+			}
+
+			
+			
+			get_sum(); //get sum first time
+
 			$("button.add_product_to_order").on("click", function(){
+
+				var $this = $(this);
+				
 				$("div#categories").height($(window).height());
 				var closest_tr = $(this).closest("tr");
 				var orders = $(".orders");
@@ -33,7 +54,7 @@
 				 </table>
 				 <div class="form-group">
 
-sum: <p id="sum" class="h4"></p>
+					 sum: <p id="sum" class="h4"></p>
 					 <button class="btn btn-info btn-block form-control"><i class="fa fa-plus"></i>{%trans "add"%}</button>
 				 </div>
 			 </div>`
@@ -41,7 +62,7 @@ sum: <p id="sum" class="h4"></p>
 				product_tr_html = `<tr data-id ="${closest_tr.data('id')}" data-sell_price = ${closest_tr.data('sell_price')}>
 				 <input name="products[]" type="hidden" value="${closest_tr.data('id')}"/>
 				 <td>${closest_tr.data("name")}</td>
-				 <td><input class="form-control quantity_input" name="quantities[]" type="number" value="1" min='1'/></td>
+				 <td><input class="form-control quantity_input" max="${closest_tr.data("quantity")}" name="quantities[]" type="number" value="1" min='1'/></td>
 				 <td>${closest_tr.data("sell_price")}</td>
 				 <td><button class="btn btn-danger delete_order_product"><i class="fa fa-trash"></i></button></td>
 			 </tr>`
@@ -51,14 +72,19 @@ sum: <p id="sum" class="h4"></p>
 				
 
 				if(orders.find(".order_products").length == 0){
+
 					orders.append(table_layout_html);
+
 					$("table.order_products tbody").append(product_tr_html);
+
 					get_sum();
 				}else{
 					
 					var ex = $("table.order_products tbody").find("tr[data-id='" + closest_tr.data("id") + "']");
 					if(ex.length == 0){
 						$("table.order_products tbody").append(product_tr_html)
+						add_disa($this, closest_tr);
+
 						get_sum();
 					}
 				}
@@ -66,11 +92,13 @@ sum: <p id="sum" class="h4"></p>
 			});
 
 			$(document).on("click",".delete_order_product", function(){
+
 				$(this).closest("tr").remove();
+
 				get_sum();
+				
 				if($("table.order_products tbody").find("tr").length == 0){
 					$("div.order_products_wrapper").remove();
-					
 				}
 			});
 
