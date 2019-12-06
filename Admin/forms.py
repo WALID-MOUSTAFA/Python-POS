@@ -86,3 +86,5 @@ class CreateClientForm(forms.ModelForm):
 
 class UpdateClientForm(CreateClientForm):
     pass
+
+

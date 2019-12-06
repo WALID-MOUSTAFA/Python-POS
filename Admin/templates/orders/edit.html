@@ -1,5 +1,5 @@
 {%extends "partials/main-layout.html"%}
-{%load i18n users_extras db_extras%}
+{%load i18n users_extras db_extras string_extras%}
 {%block content%}
 
 {%user_allowed "edit_category" as allow_edit_category%}
@@ -8,19 +8,27 @@
 {%user_allowed "show_category" as allow_show_category%}
 
 
-<div class="form-wrapper container-fluid" style="width: 80%; padding: 1px">
+<div class="form-wrapper container" style="padding: 1px">
 
 	
-	<div class="text-center mt-4">
+	<div class="text-center mt-4 p-4">
 		<div class="text-center h3">{%trans "edit order"%}</div>
 	</div>
 	
+
+
+<nav aria-label="breadcrumb bg-transparent">
+  <ol class="breadcrumb bg-transparent text-dark">
+    <li class="breadcrumb-item"><a href="/admin/order">{%trans "orders"%}</a></li>
+    <li class="breadcrumb-item" aria-current="page">{%trans "edit order"%}</li>
+  </ol>
+</nav>
 
 <div class="row">
 
 	<!-- categories -->
 	
-		<div id="categories" class="card col-xl-6" style="overflow:scroll">
+		<div id="categories" class="card col-xl-6" style="overflow:auto">
 			
 			<p class="h3 m-2">{%trans "categories"%}</p>
 			
@@ -28,15 +36,15 @@
 			
 			{%related_products ct.Category.id as related_prods%}
 
-			{%if not related_prods.en.count == 0%}
+			{%if not related_prods.results.count == 0%}
 
-			<div class="category card card-info collapsed-card m-4">
+			<div class="category card card-primary collapsed-card m-4">
 				
 				<div class="card-header">
 					<h3 class="card-title">{{ct.name}}</h3>
 
 					<div class="d-block card-tools ml-auto">
-						<button type="button" class="btn btn-tool" data-card-widget="collapse">
+						<button type="button" class="btn btn-tool" data-card-widget="">
 							<i class="fas fa-plus"></i>
 						</button>
 					</div>
@@ -44,7 +52,7 @@
 				
 				<div class="card-body">
 					<table class="table table-bordered" style="overflow:scroll">
-						<thead class="bg-info">
+						<thead class="bg-light">
 							<th>{%trans "name"%}</th>
 							<th>{%trans "available quantity"%}</th>
 							<th>{%trans "sell price"%}</th>
@@ -52,9 +60,11 @@
 						</thead>
 						<tbody>
 							
-					{%if LANG == "en"%}
 					
-					{%for i in related_prods.en%}
+					{%for i in related_prods.results%}
+
+					
+										
 					<tr class="related_product" data-name="{{i.name}}" data-id="{{i.product.id}}" data-sell_price = "{{i.product.sell_price}}" data-quantity="{{i.product.available_quantity}}">
 						<td>
 							{{i.name}}
@@ -62,7 +72,7 @@
 						<td>{{i.product.available_quantity}}</td>
 						<td>{{i.product.sell_price}}</td>
 						<td>
-							<button class="btn flat btn-success add_product_to_order"
+							<button class="btn  btn-success add_product_to_order"
 									{%if i.product.available_quantity == 0 or i.product.available_quantity == None%} disabled {%endif%} >
 
 		
@@ -72,27 +82,6 @@
 					</tr>
 					{%endfor%}
 
-					{%else%}
-					
-					{%for i in related_prods.ar%}
-					<tr class="related_product" data-name="{{i.name}}" data-id="{{i.product.id}}" data-sell_price = "{{i.product.sell_price}}" data-quantity="{{i.product.quantity}}">
-						<td>
-							{{i.name}}
-						</td>
-						<td>{{i.product.available_quantity}}</td>
-						<td>{{i.product.sell_price}}</td>
-						<td>
-							<button class="btn flat  btn-success add_product_to_order"
-									{%if i.product.available_quantity == 0 or i.product.available_quantity == None%} disabled {%endif%} >
-
-									
-								<i class="fa fa-plus"></i>
-							</button>
-						</td>
-					</tr>
-					{%endfor%}
-
-					{%endif%}
 					
 						</tbody>
 					</table>
@@ -107,17 +96,29 @@
 		</div>
 
 		<!-- orders -->
-		<div class="col-xl-5">
+		<div class="col-xl-5 offset-xl-1">
 			
 			<div class="card">
-				<p class="h3 m-2">{%trans "orders"%}</p>
+				<div class="card-header">{%trans "order"%}</div>
 
+				<div class="card-body">
 				<form id="order_form" action="" method="post">
 					{%csrf_token%}
 					<div class="orders">
 						
-						<table class='table table-striped order_products'>
-							<thead>
+						<div class="form-group">
+							<label>{%trans "state"%} </label> :
+							<select name="delivered" class="custom-select">
+								
+								<option {%if order.delivered !=  False %} selected {%endif%} value="delivered" >{%trans "delivered"%}</option>
+								<option {%if order.delivered ==   False%} selected {%endif%} >{%trans "not delivered"%}</option>
+								
+							</select>
+						</div>
+
+						
+						<table class='table table-bordered order_products'>
+							<thead class="bg-light">
 								<th>{%trans "name"%}</th>
 								<th>{%trans "quantity"%}</th>
 								<th>{%trans "sell price"%}</th>
@@ -134,7 +135,7 @@
 									{%for op in order.order_product_set.all %}
 									{%if op.product_id == pt.product.id%}
 									
-									<td><input required class="form-control quantity_input"  name="quantities[]" type="number" min="1" value="{{op.quantity}}"/> </td>
+									<td><input required class="form-control quantity_input" max="{{pt.product.available_quantity|add:op.quantity}}" name="quantities[]" type="number" min="1" value="{{op.quantity}}"/> </td>
 									
 									{%endif%}
 									{%endfor%}
@@ -146,16 +147,23 @@
 								</tr>
 								{%endfor%}
 							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="2">{%trans "price"%}</td>
+									<td id="sum" colspan="2"></td>
+								</tr>
+							</tfoot>
 						</table>
 						<div class="form-group">
 
-							sum: <p id="sum" class="h4"></p>
-							<button class="btn btn-info btn-block form-control"><i class="fa fa-plus"></i>{%trans "add"%}</button>
+							
+							<button class="btn btn-success  btn-block form-control"><i class="fa fa-edit"></i> {%trans "edit"%} </button>
 						</div>
 					</div>
 			</div>
 			
-			</form>
+				</form>
+				</div>
 		</div>
 		</div>
 		</div>

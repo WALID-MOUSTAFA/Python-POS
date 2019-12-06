@@ -35,6 +35,7 @@
 			<table id="all_categories" class="table text-center table-bordered" style="overflow:hidden">
 				<thead class="bg-light">
 					<tr>
+						<th>#</th>
 						<th>{%trans "category name"%}</th>
 						<th>{%trans "category description"%}</th>
 						<th>{%trans "available products"%}</th>
@@ -48,7 +49,7 @@
 					
 					<tr>
 
-						
+						<td>{{forloop.counter}}</td>
 						{%for ct in categories_trans%}
 						{%if ct.Category.id == c.id%}
 						<td>{{ct.name}}</td>
@@ -61,8 +62,8 @@
 							
 							<a href="/admin/product/cat_filt/{{c.id}}">
 								
-								<button {%if related_prods.en.count == 0%} disabled {%endif%} class="btn btn-primary ">
-									{{related_prods.en.count}}
+								<button {%if related_prods.results.count == 0%} disabled {%endif%} class="btn btn-primary ">
+									{{related_prods.results.count}}
 								</button>
 								
 							</a>

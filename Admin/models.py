@@ -1,5 +1,6 @@
 from django.db import models
-        
+from django.utils.translation import get_language
+
 class Role (models.Model):
     id   = models.BigAutoField(primary_key = True)
     name = models.TextField(null = True)
@@ -59,8 +60,7 @@ class Category(models.Model):
 
         related_products_id_list = Product.objects.prefetch_related("category").filter(category__id=int(id)).values_list("id", flat=True) 
         result =  {
-            "en": Product_translation.objects.prefetch_related("product").filter(product__id__in=related_products_id_list, language="en"),
-            "ar": Product_translation.objects.prefetch_related("product").filter(product__id__in=related_products_id_list, language="ar"),
+            "results": Product_translation.objects.prefetch_related("product").filter(product__id__in=related_products_id_list, language=get_language()), 
             "images": Product_images.objects.prefetch_related("product").filter(product__id__in=related_products_id_list)
         }
         return result
@@ -131,8 +131,9 @@ class Order(models.Model):
     id = models.BigAutoField(primary_key = True)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     product = models.ManyToManyField(Product, through="Order_product")
+    delivered = models.BooleanField(default=False)
     created_date = models.DateField(auto_now_add=True,null= True)
-
+    
     class Meta:
         db_table = "orders"
         managed=True

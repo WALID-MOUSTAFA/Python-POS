@@ -28,9 +28,10 @@
 			<div class="clearfix"></div>
 
 			{%if users%}
-			<table id="" class="table" style="overflow:hidden">
-				<thead class="bg-primary">
+			<table id="" class="table table-hover table-bordered " style="overflow:hidden">
+				<thead class="bg-light">
 					<tr>
+						<th>#</th>
 						<th>{%trans "username"%}</th>
 						<th>{% trans "fullname" %}</th>
 						<th>{%trans "email"%}</th>
@@ -41,6 +42,7 @@
 				<tbody>
 					{%for u in users%}
 					<tr>
+						<td>{{forloop.counter}}</td>
 						<td>{{u.username}}</td>
 						<td>{{u.fullname}}</td>
 						<td>{{u.email}}</td>

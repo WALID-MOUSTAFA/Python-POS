@@ -45,9 +45,10 @@
 			<div class="clearfix"></div>
 
 			{%if products %}
-			<table id="all_products" class="table table-responsive text-center" style="overflow-x:auto; overflow-y:hidden">
+			<table id="all_products" class="table table-responsive table-hover table-striped text-center" style="overflow-x:auto; overflow-y:hidden">
 				<thead class="bg-light">
 					<tr>
+						<th>#</th>
 						<th>{%trans "product name"%}</th>
 						<th>{%trans "product description"%}</th>
 						<th>{%trans "category" %} </th>
@@ -63,7 +64,8 @@
 					{%for p in products %}
 					
 					<tr>
-
+						<td>{{forloop.counter}}</td>
+						
 						{%for pt in products_trans%}
 						{%if pt.product.id == p.id%}
 						<td>{{pt.name}}</td>

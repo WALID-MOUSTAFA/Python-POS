@@ -105,11 +105,20 @@ def create_order(request, client_id):
         
         products = request.POST.getlist("products[]")
         quantities = request.POST.getlist("quantities[]")
+        delivered = request.POST.get("delivered", None)
+
+        if products == None or len(products) == 0 or  quantities == None or len(quantities) == 0:
+            return JsonResponse({"success": False, "message": "some parameters are missing"})
+
         order_request = dict(zip(products, quantities))
 
         order = Order()
         order.client = client
-        order.save()
+        
+        if delivered != None:
+            delivered_state = True if delivered ==  "delivered" else False
+            order.delivered = delivered_state
+
 
         for k,v  in order_request.items():
 
@@ -120,13 +129,15 @@ def create_order(request, client_id):
                 messages.error(request, _("prouct has no enough available quantity"))
                 return redirect(request.META.get('HTTP_REFERER'))
             product.save()
+
             
+            order.save()
             Order_product.objects.create(
                 order = order,
                 product = Product.objects.get(id = k),
                 quantity = v,
             )
-        messages.success(request, _("order created successfully"))    
+            messages.success(request, _("order created successfully"))    
         return redirect("/admin/order/all")
 
 
@@ -166,6 +177,16 @@ def edit_order(request, order_id):
         return render(request, "orders/edit.html", ctx)
 
     elif request.method == "POST":
+
+        products = request.POST.getlist("products[]", None)
+        quantities = request.POST.getlist("quantities[]", None)
+        delivered = request.POST.get("delivered", None)
+        
+        
+
+        if products == None or len(products) == 0 or  quantities == None or len(quantities) == 0 or delivered == None:
+            return JsonResponse({"success": False, "message": "some parameters are missing", "request": request.POST})
+        
         
         #delete the old order
         for product in order.product.all():
@@ -173,25 +194,30 @@ def edit_order(request, order_id):
             product.save()
             order.product.remove(product)
             
-        
-
+        pprint(request.POST)
+            
         #create the new order
-        products = request.POST.getlist("products[]")
-        quantities = request.POST.getlist("quantities[]")
         order_request = dict(zip(products, quantities))
-
+        delivered_state = True if delivered ==  "delivered" else False
+        
+        
         order.client = client
+        order.delivered = delivered_state
         order.save()
+
+        # order.save()
 
         for k,v  in order_request.items():
 
+
             product = Product.objects.get(id = k)
+
             product.available_quantity = int(product.available_quantity) - int(v)
+            
             if product.available_quantity < 0:
-                prod_name = Product_translation.objects.get(product=product, language = get_language()).name
                 messages.error(request, _("prouct has no enough available quantity"))
                 return redirect("/admin/order/")
-
+            
             product.save()
             
             Order_product.objects.create(

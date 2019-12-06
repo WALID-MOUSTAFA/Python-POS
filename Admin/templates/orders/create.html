@@ -3,16 +3,16 @@
 {%block content%}
 {%get_current_language as LANG%}
 
-<div class="form-wrapper container" style="width: 80%; padding: 1px">
+<div class="form-wrapper container" style=" padding: 1px">
 	
-	<div class="text-center mt-4">
-		<p class="text-center h3">{%trans "create new order"%} {{client_id}}</p>
+	<div class="text-center bg-light rounded m-4 p-2">
+		<p class="text-center h3">{%trans "create new order"%}</p>
 	</div>
 
 	<div class="row">
 
 		<!-- categories -->
-		<div id="categories" class="card col-xl-6" style="overflow:scroll">
+		<div id="categories" class="card col-xl-6" style="overflow:auto">
 			
 			<p class="h3 m-2">{%trans "categories"%}</p>
 			
@@ -20,14 +20,14 @@
 			
 			{%related_products ct.Category.id as related_prods%}
 
-			{%if not related_prods.en.count == 0%}
-			<div class="card card-info collapsed-card m-4">
+			{%if not related_prods.results.count == 0%}
+			<div class="category card card-primary collapsed-card m-4">
 				
 				<div class="card-header">
 					<h3 class="card-title">{{ct.name}}</h3>
 
 					<div class="d-block card-tools ml-auto">
-						<button type="button" class="btn btn-tool" data-card-widget="collapse">
+						<button type="button" class="btn btn-tool" data-card-widget="">
 							<i class="fas fa-plus"></i>
 						</button>
 					</div>
@@ -35,7 +35,7 @@
 				
 				<div class="card-body">
 					<table class="table table-bordered" style="overflow:scroll">
-						<thead class="bg-info">
+						<thead class="bg-light">
 							<th>{%trans "name"%}</th>
 							<th>{%trans "available quantity"%}</th>
 							<th>{%trans "sell price"%}</th>
@@ -43,9 +43,8 @@
 						</thead>
 						<tbody>
 							
-					{%if LANG == "en"%}
 					
-					{%for i in related_prods.en%}
+					{%for i in related_prods.results%}
 					<tr class="related_product" data-name="{{i.name}}" data-id="{{i.product.id}}" data-sell_price = "{{i.product.sell_price}}" data-quantity="{{i.product.available_quantity}}">
 						<td>
 							{{i.name}}
@@ -54,7 +53,7 @@
 						<td>{{i.product.sell_price}}</td>
 						<td>
 							<button
-								class="btn flat btn-success add_product_to_order"
+								class="btn  btn-success add_product_to_order"
 									   {%if i.product.available_quantity == 0 or i.product.available_quantity == None%} disabled {%endif%} >
 								<i class="fa fa-plus"></i>
 							</button>
@@ -62,26 +61,6 @@
 					</tr>
 					{%endfor%}
 
-					{%else%}
-					
-					{%for i in related_prods.ar%}
-					<tr class="related_product" data-name="{{i.name}}" data-id="{{i.product.id}}" data-sell_price = "{{i.product.sell_price}}" data-quantity="{{i.product.quantity}}">
-						<td>
-							{{i.name}}
-						</td>
-						<td>{{i.product.available_quantity}}</td>
-						<td>{{i.product.sell_price}}</td>
-						<td>
-							<button class="btn flat  btn-success add_product_to_order"
-									{%if i.product.available_quantity == 0 or i.product.available_quantity == None%} disabled {%endif%}
-							>
-								<i class="fa fa-plus"></i>
-							</button>
-						</td>
-					</tr>
-					{%endfor%}
-
-					{%endif%}
 					
 						</tbody>
 					</table>
@@ -96,19 +75,28 @@
 		</div>
 
 		<!-- orders -->
-		<div class="col-xl-6">
+		<div class="col-xl-5 offset-xl-1">
 			
-			<div class="card">
-				<p class="h3 m-2">{%trans "orders"%}</p>
-				<form id="order_form" action="" method="post">
-					{%csrf_token%}
-					<div class="orders">
-					</div>
-					
-				</form>
+			<div class="card p-2">
+				<div class="card-header">{%trans "order"%}</div>
+
+				<div class="card-body">
+					<form id="order_form" action="" method="post">
+						{%csrf_token%}
+						<div class="orders">
+							
+							
+
+						</div>	
+					</form>
+				</div>
+				
 			</div>
 		</div>
-		</div>
+	</div>
 	
 </div>
+
+
+
 {%endblock content%}

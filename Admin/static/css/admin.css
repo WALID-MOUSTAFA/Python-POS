@@ -1,10 +1,12 @@
-body{
-  
 
-    font-family: 'Cairo', sans-serif !important;
-
-  
+*{
+	vertical-align: middle;
 }
+
+body{
+    font-family: 'Cairo', sans-serif !important;
+}
+
 .card {
     border-top-width: 3px;
 }
@@ -40,4 +42,16 @@ button[disabled], li.disabled{
 .card-tools {
 	left: initial !important;
 	right: initial !important;
+}
+
+div.card.category .card-header {
+	cursor: pointer;
+}
+
+table thead tr th{
+	vertical-align: middle !important;
+}
+
+table#all_orders tbody tr td{
+	vertical-align: middle;
 }

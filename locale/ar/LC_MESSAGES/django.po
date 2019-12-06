@@ -69,6 +69,10 @@ msgid "price"
 msgstr "السعر"
 
 
+msgid "quantity"
+msgstr "الكمية"
+
+
 
 ###############################################################
 
@@ -326,29 +330,55 @@ msgid "are you sure you want to delete this client?"
 msgstr "هل أنت متأكد من حذف هذا العميل؟"
 
 
-###################################clients###########################
+###################################orderd###########################
 
 
 msgid "order"
-msgstr "الطلبات"
+msgstr "الطلب"
 
 msgid "orders"
 msgstr "طلبات"
 
+
+msgid "the orders"
+msgstr "الطلبات"
+
+
 msgid "created date"
 msgstr "وقت الإضافة"
 
-# msgid ""
-# msgstr ""
+msgid "order has been deleted successfully"
+msgstr "تم حذف الطلب بنجاح"
 
-# msgid ""
-# msgstr ""
+msgid "order created successfully"
+msgstr "تم إضافة الطلب بنجاح"
 
-# msgid ""
-# msgstr ""
 
-# msgid ""
-# msgstr ""
+msgid "order updated successfully"
+msgstr "تم تعديل الطلب بنجاح"
+
+
+msgid "edit order"
+msgstr "تعديل الطلب"
+
+msgid "create new order"
+msgstr "إضافة طلب جديد"
+
+
+msgid "are you sure you want to delete this order?"
+msgstr "هل أنت متأكد من حذف هذا الطلب؟"
+
+msgid "delivery"
+msgstr "التوصيل"
+
+msgid "not yet"
+msgstr "ليس بعد"
+
+msgid "delivered"
+msgstr "تم التوصيل"
+
+msgid "prouct has no enough available quantity"
+msgstr "لا يوجد كمية كافية من المنتج"
 
 # msgid ""
 # msgstr ""

@@ -10,24 +10,12 @@
 					sum += $(this).val() * $(this).closest("tr").data("sell_price")
 				});
 				
-				$("p#sum").empty().append(sum)
+				$("#sum").empty().append(sum)
 				console.log(sum);
 
 			}
 			
-			function add_disabled(button, tr){
 		
-				
-				var ex = $("table.order_products tbody").find("tr[data-id='" + tr.data("id") + "']");
-				if (ex.length == 0) {
-					button.prop("disabled", false);
-					console.log("not disabled");
-				}
-				if (ex.length != 0) {
-					button.prop("disabled", true);
-					console.log("disabled");
-				}
-			}
 
 			
 			
@@ -43,7 +31,16 @@
 
 
 				table_layout_html =`<div class="order_products_wrapper">
-				 <table class='table table-striped order_products'>
+<div class="form-group">
+								<label>{%trans "state"%} </label> :
+								<select name="delivered" class="custom-select">
+									
+									<option {%if order.delivered !=  False %} selected {%endif%} >{%trans "delivered"%}</option>
+									<option {%if order.delivered ==   False%} selected {%endif%} >{%trans "not delivered"%}</option>
+									
+								</select>
+</div>
+				 <table class='table table-bordered order_products'>
 					 <thead>
 						 <th>{%trans "name"%}</th>
 						 <th>{%trans "quantity"%}</th>
@@ -51,11 +48,16 @@
 						 <th>{%trans "delete"%}</th>				 
 					 </thead>
 					 <tbody> </tbody>
+		<tfoot>
+								<tr>
+									<td colspan="2">{%trans "price"%}</td>
+									<td id="sum" colspan="2"></td>
+								</tr>
+							</tfoot>
 				 </table>
 				 <div class="form-group">
 
-					 sum: <p id="sum" class="h4"></p>
-					 <button class="btn btn-info btn-block form-control"><i class="fa fa-plus"></i>{%trans "add"%}</button>
+					 <button class="btn btn-success  btn-block form-control"> <i class="fa fa-plus"> </i> {%trans "add"%} </button>
 				 </div>
 			 </div>`
 
@@ -74,21 +76,19 @@
 				if(orders.find(".order_products").length == 0){
 
 					orders.append(table_layout_html);
+					get_sum();
 
 					$("table.order_products tbody").append(product_tr_html);
-
 					get_sum();
 				}else{
 					
 					var ex = $("table.order_products tbody").find("tr[data-id='" + closest_tr.data("id") + "']");
 					if(ex.length == 0){
 						$("table.order_products tbody").append(product_tr_html)
-						add_disa($this, closest_tr);
-
 						get_sum();
 					}
 				}
-
+				get_sum();
 			});
 
 			$(document).on("click",".delete_order_product", function(){
