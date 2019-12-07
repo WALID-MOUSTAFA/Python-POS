@@ -177,7 +177,6 @@ def edit_admin(request, id):
 
             permissions = request.POST.getlist("permissions[]")
 
-            print(f"\n {permissions} \n")
             
             if request.FILES.get("avatar") != None:
                 
@@ -207,13 +206,13 @@ def edit_admin(request, id):
             ##save previous changes
             user.save()
             
-            if roles:
+            if roles and user.role.name != "super_admin":
                 user.role  = Role.objects.get(name = roles)
                 user.save()
 
             ##ensure if allowed because it's dangerous
             if permissions:
-                if is_allowed(request, user.id, "edit_admin"):
+                if is_allowed(request, user.id, "edit_admin") and user.role.name !="super_admin":
                     user.permission.clear()
                     for i in permissions:
                         user.permission.add(Permission.objects.get(id = i))
