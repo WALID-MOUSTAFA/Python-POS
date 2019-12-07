@@ -3,6 +3,8 @@ from .helpers import is_loged_in
 from .forms import LoginForm
 from django.core.exceptions import ObjectDoesNotExist
 from .models import Admin
+from django.contrib.auth import login, logout,authenticate, load_backend
+import json
 
 def login_admin(request):
     
@@ -17,7 +19,7 @@ def login_admin(request):
         
         login_form = LoginForm(request.POST)
 
-        print("\n \n dsadas \n\n")
+        
         
         if not login_form.is_valid():
 
@@ -29,28 +31,25 @@ def login_admin(request):
             username = login_form.cleaned_data.get("username")
             password = login_form.cleaned_data.get("password")
 
-            try:
-                user = Admin.objects.prefetch_related("permission").get(username = username, password = password)
+            user = authenticate(username=username, password=password)
+            print(f"\n\nresult\n{user}")
 
-                request.session["username"] = user.username
-
-                request.session["user_id"]  = user.id
-                
-                request.session["user_avatar"]  = user.avatar
-
-                user_permission_array = [p.name for p in user.permission.all()]
-                request.session["user_permissions"] = user_permission_array
-                    
-                return redirect("/admin/")
-            
-            except  ObjectDoesNotExist:
-                
+            if user != None:
+                login(request,user)
+                return redirect('/admin/')
+            else:
                 return render(request, "login.html", {"error": "Error, either username or password is wrong, try again! "})
-                
+
+            
+
+      
+        
+        
 
             
             
         
 def logout_admin(request):
-    request.session.flush()
+    # request.session.flush()
+    logout(request)
     return redirect("/admin/login")

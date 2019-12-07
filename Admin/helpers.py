@@ -4,15 +4,14 @@ from django.shortcuts import redirect
 
 
 def is_allowed(request, user_id, *args):
-
+    print(args)
     try:
+        user_permissions = request.user.permission.all()
+        user_permission_array  = [p.name for p in user_permissions]
         
-        user_permission_array  = request.session["user_permissions"] 
-    
-
         for i in args:   
 
-            if not i in user_permission_array:
+            if not i.strip() in user_permission_array:
                 
                 return False
 
@@ -20,12 +19,12 @@ def is_allowed(request, user_id, *args):
             
     except ObjectDoesNotExist:
 
-        print(f"\nuser not found\n")
+        
         return redirect("/admin/")
 
 
 def is_own_profile(request, id):
-    if request.session.get("user_id") == int(id):
+    if request.user.id == int(id):
         return True
     return False
         
@@ -33,7 +32,7 @@ def is_own_profile(request, id):
 
     
 def is_loged_in(request):
-    if request.session.get("username"):
+    if request.user.is_authenticated:
         return True
     return False
         

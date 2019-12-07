@@ -73,6 +73,13 @@ msgid "quantity"
 msgstr "الكمية"
 
 
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+
+msgid "More info"
+msgstr "المزيد"
+
 
 ###############################################################
 

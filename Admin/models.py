@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import get_language
+from django.contrib.auth.models import AbstractBaseUser
 
 class Role (models.Model):
     id   = models.BigAutoField(primary_key = True)
@@ -26,7 +27,7 @@ class Permission (models.Model):
         
 
         
-class Admin (models.Model):
+class Admin (AbstractBaseUser):
 
     id       = models.BigAutoField(primary_key = True)
     username = models.TextField(null = True)
@@ -37,8 +38,10 @@ class Admin (models.Model):
     avatar     = models.TextField(default="avatar.png", null = True)
     register_date = models.DateTimeField(auto_now_add = True, null= True)
     permission = models.ManyToManyField(Permission, blank = True, related_name="permissions")
-    
 
+    REQUIRED_FIELDS = []
+    USERNAME_FIELD  = "email"
+    
     class Meta:
         db_table = "users"
         managed = True

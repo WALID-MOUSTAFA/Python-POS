@@ -6,6 +6,7 @@
 {%user_allowed "delete_client" as allow_delete_client%}
 {%user_allowed "create_client" as allow_create_client%}
 {%user_allowed "read_client" as allow_show_client%}
+{%user_allowed "create_order" as allow_create_order%}
 
 
 
@@ -56,6 +57,7 @@
 							
 							<a href="/admin/client/{{c.id}}/orders/add">
 								<button
+									{%if not allow_create_order %} disabled {%endif%}
 									data-user_id="{{u.id}}"
 									class="btn btn-success">
 									{%trans "add order"%} 

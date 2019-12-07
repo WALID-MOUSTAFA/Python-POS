@@ -53,7 +53,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'Admin.middleware.CheckAuth',
-    'commons.middleware.Global',
+    # 'commons.middleware.Global',
     "debug_toolbar.middleware.DebugToolbarMiddleware"
 ]
 
@@ -109,6 +109,14 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
+
+AUTHENTICATION_BACKENDS = (
+    "Admin.CustomAuthBackend.CustomAuthBackend",
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -139,6 +147,8 @@ LOCALE_PATHS = [
 STATIC_URL = '/static/'
 
 
+
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT= os.path.join(BASE_DIR, "media")
 
@@ -153,3 +163,11 @@ APPEND_SLASH = True
 
 #########################################global debug###############################################################
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'incremental': True,
+    'root': {
+        'level': 'DEBUG',
+    },
+}

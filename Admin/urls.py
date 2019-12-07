@@ -1,26 +1,14 @@
-"""ecommerce URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/2.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
+from django.shortcuts import render
 from . import views 
 from . import category_views as c_v
 from . import product_views  as p_v
 from . import client_views  as client_views
 from . import order_views as order_views
 from . import custom_auth_views as auth_views
+
+
 
 custom_auth_urlpatterns = [
     path("/login/", auth_views.login_admin),
@@ -70,6 +58,11 @@ orders_urlpatterns = [
     path("/delete/<int:order_id>/", order_views.delete_order),
 ]
 
+
+def error403(request):
+    return render(request, "403.html")
+
+
 urlpatterns = [
     path("/", views.index_admin),
     path("/all/", views.all_admins),
@@ -80,7 +73,8 @@ urlpatterns = [
     path("/category", include(categories_urlpatterns)),
     path("/product", include(products_urlpatterns)),
     path("/client", include(clients_urlpatterns)),
-    path("/order", include(orders_urlpatterns))
+    path("/order", include(orders_urlpatterns)),
+    path("/error403/", error403)
 ]
 
 

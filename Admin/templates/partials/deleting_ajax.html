@@ -84,7 +84,7 @@
 							 type: "success",
 							 text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i>" + data.message + "</div>",
 							 timeout: 1500,
-							 closeWith: ['button'],
+							
 							 theme: "relax"
 
 						 }).show()
@@ -120,7 +120,7 @@
 							 type: "success",
 							 text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i>" + data.message + "</div>",
 							 timeout: 1500,
-							 closeWith: ['button'],
+							 
 							 theme: "relax"
 
 						 }).show()
@@ -153,13 +153,22 @@
 							 type: "success",
 							 text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i>" + data.message + "</div>",
 							 timeout: 1500,
-							 closeWith: ['button'],
 							 theme: "relax"
 
 						 }).show()
 						 setTimeout(function(){
 							 window.location.href = "/admin/";
 						 }, 1000)
+					 }else if(data.success == false){
+						 var noty = new Noty({
+							 
+							 type: "error",
+							 text: "<div> <i class='float-right fas fa-exclamation-circle fa-lg'></i>" + data.message + "</div>",
+							 timeout: 1500,
+							 
+							 theme: "sunset"
+
+						 }).show()
 					 }
 				 }
 			 }); //end ajax call
@@ -190,7 +199,7 @@
 							 type: "success",
 							 text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i>" + data.message + "</div>",
 							 timeout: 1500,
-							 closeWith: ['button'],
+							 
 							 theme: "relax"
 
 						 }).show()
@@ -229,7 +238,7 @@
 							 type: "success",
 							 text: "<div> <i class='float-right fas fa-check-circle fa-lg'></i>" + data.message + "</div>",
 							 timeout: 1500,
-							 closeWith: ['button'],
+							 
 							 theme: "relax"
 
 						 }).show()

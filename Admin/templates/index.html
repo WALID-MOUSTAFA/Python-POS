@@ -1,5 +1,84 @@
 {%extends "partials/main-layout.html"%}
+{%load i18n%}
+{%block content %}
+{%get_current_language as LANG%}
 
-{%block content%}
+<div class="container">
 
+	<div class="">
+		<p class="h1 p-4 m-0 text-dark">{%trans "Dashboard" %}</p>
+	</div><!-- /.col -->
+
+<div class="row">
+	{%for k, v in data.items%}
+	
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-{{v.color}}">
+            <div class="inner">
+                <h3>{{v.count}}</h3>
+
+                <p>{{v.name}}</p>
+            </div>
+            <div class="icon">
+                <i class="{{v.icon}}"></i>
+			</div>
+            <a href="{{v.href}}" class="small-box-footer"> {%trans "More info" %} <i class="fas fa-arrow-circle-{%if LANG == 'ar'%}left{%else%}right{%endif%}"></i></a>
+        </div>
+    </div>
+	{%endfor%}
+	<!-- ./col -->
+
+	
+
+    
+<!--     <div class="col-lg-3 col-6"> -->
+<!--         <\!-- small box -\-> -->
+<!--         <div class="small-box bg-success"> -->
+<!--             <div class="inner"> -->
+<!--                 <h3>53<sup style="font-size: 20px">%</sup></h3> -->
+
+<!--                 <p>Bounce Rate</p> -->
+<!--             </div> -->
+<!--             <div class="icon"> -->
+<!--                 <i class="ion ion-stats-bars"></i> -->
+<!--             </div> -->
+<!--             <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+<!--         </div> -->
+<!--     </div> -->
+<!--     <\!-- ./col -\-> -->
+<!--     <div class="col-lg-3 col-6"> -->
+<!--         <\!-- small box -\-> -->
+<!--         <div class="small-box bg-warning"> -->
+<!--             <div class="inner"> -->
+<!--                 <h3>44</h3> -->
+
+<!--                 <p>User Registrations</p> -->
+<!--             </div> -->
+<!--             <div class="icon"> -->
+<!--                 <i class="ion ion-person-add"></i> -->
+<!--             </div> -->
+<!--             <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+<!--         </div> -->
+<!--     </div> -->
+<!--     <\!-- ./col -\-> -->
+<!--     <div class="col-lg-3 col-6"> -->
+<!--         <\!-- small box -\-> -->
+<!--         <div class="small-box bg-danger"> -->
+<!--             <div class="inner"> -->
+<!--                 <h3>65</h3> -->
+
+<!--                 <p>Unique Visitors</p> -->
+<!--             </div> -->
+<!--             <div class="icon"> -->
+<!--                 <i class="ion ion-pie-graph"></i> -->
+<!--             </div> -->
+<!--             <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> -->
+<!--         </div> -->
+<!--     </div> -->
+<!--     <\!-- ./col -\-> -->
+
+</div>
+
+</div>
 {%endblock content%}

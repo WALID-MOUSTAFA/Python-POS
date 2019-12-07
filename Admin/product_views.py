@@ -10,12 +10,14 @@ from .forms import CreateProductForm, UpdateProductForm
 from django.conf import settings
 from django.contrib import messages
 from django.db.models import Q
+from .decorators import is_allowed, is_al
 
 #---------------------------------------------------------------------------------------#
 
 
-
+@is_allowed("read_product")
 def index_product(request):
+    
 
     per_page = 2
     page = request.GET.get("page", 1)
@@ -72,6 +74,8 @@ def index_product(request):
 
 ########################################################################################################################################3
 
+
+@is_allowed("read_product")
 def filtered_by_category_product(request, category_id):
 
     per_page = 2
@@ -127,7 +131,7 @@ def filtered_by_category_product(request, category_id):
 ########################################################################################################################################
 
 
-
+@is_allowed("create_product")
 def create_product(request):
     context = {
         "title": _("Add product"),
@@ -191,7 +195,7 @@ def create_product(request):
 
 
         
-
+@is_allowed("edit_product")
 def edit_product(request, id):
     product =  Product.objects.get(id = id)
     product_ar = Product_translation.objects.get(product = product, language = "ar")
@@ -250,7 +254,7 @@ def edit_product(request, id):
 
 
 
-        
+@is_allowed("read_product")        
 def detailed_product(request, id):
     product = Product.objects.get(id = id)
     product_en =  Product_translation.objects.get(product = product, language = "en")
@@ -265,7 +269,7 @@ def detailed_product(request, id):
     return render(request, "products/detailed_product.html", context)
 
 
-
+@is_allowed("delete_product")
 def delete_product(request, id):
     context = {}
     if request.method == "POST":

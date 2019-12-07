@@ -1,91 +1,26 @@
 from django.shortcuts import redirect, render
 from .helpers import is_loged_in, is_allowed
-
-
+from django.utils.translation import get_language 
+from pprint import pprint
+from django.contrib.auth import load_backend, logout
+import logging
 
 class CheckAuth:
+
     def __init__(self, get_response):
         self.get_response = get_response
+        
 
     def __call__(self, request):
+        load_backend("Admin.CustomAuthBackend.CustomAuthBackend")
+
+        
+        if not request.user.is_authenticated and request.path.find("admin/login") == -1:
+            return redirect("/en/admin/login/")
+        else:
+            return self.get_response(request)
+
         return self.get_response(request)
-    
-    def process_view(self, request, view_func, view_args, view_kwargs):
 
-        ##backend admin permissions
-        if (view_func.__name__.endswith("admin") or \
-            view_func.__name__.endswith("admins") or \
-            view_func.__name__.endswith("product") or \
-            view_func.__name__.endswith("category")  or \
-            view_func.__name__.endswith("client")) and not \
-            view_func.__name__.startswith('login') :
-            if not  is_loged_in(request):
-                return redirect("/admin/login")
-            
-        if view_func.__name__ == "edit_admin":
-            
-            if not is_allowed(request, request.session.get("user_id"), "edit_admin") :
-                if view_kwargs["id"] == request.session.get("user_id"):
-                    return                 
-                else:
-                    return render(request, "403.html", {}, status = 403)
-
-            
-        if view_func.__name__ == "delete_admin":
-            if not is_allowed(request,request.session.get("user_id"), "delete_admin") :
-                return render(request, "403.html", {}, status = 403)
-            
-                
-        if view_func.__name__ == "create_admin":
-            if not is_allowed(request,request.session.get("user_id"), "create_admin") :
-                return render(request, "403.html", {}, status = 403)
-            
-
-        if view_func.__name__ == "all_admins":
-            if not is_allowed(request,request.session.get("user_id"), "read_admin") :
-                 return render(request, "403.html", {}, status = 403)
-
-
-        ##backend admin categories permissions
-
-        if view_func.__name__ == "edit_category":            
-            if not is_allowed(request,request.session.get("user_id"), "edit_category") :
-                return render(request, "403.html", {}, status = 403)
-            
-        if view_func.__name__ == "delete_category":
-            if not is_allowed(request,request.session.get("user_id"), "delete_category") :
-                return render(request, "403.html", {}, status = 403)
-            
-                
-        if view_func.__name__ == "create_category":
-            if not is_allowed(request,request.session.get("user_id"), "create_category") :
-                return render(request, "403.html", {}, status = 403)
-            
-
-        if view_func.__name__ == "index_category":
-            if not is_allowed(request,request.session.get("user_id"), "read_category") :
-                 return render(request, "403.html", {}, status = 403)
-
-        ##backend admin categories permissions
-
-        if view_func.__name__ == "edit_product":            
-             if not is_allowed(request,request.session.get("user_id"), "edit_product") :
-                 return render(request, "403.html", {}, status = 403)
-
-        if view_func.__name__ == "delete_product":
-            if not is_allowed(request,request.session.get("user_id"), "delete_product") :
-                return render(request, "403.html", {}, status = 403)
-
-
-        if view_func.__name__ == "create_product":
-            if not is_allowed(request,request.session.get("user_id"), "create_product") :
-                return render(request, "403.html", {}, status = 403)
-
-
-        if view_func.__name__ == "index_product":
-            if not is_allowed(request,request.session.get("user_id"), "read_product") :
-                 return render(request, "403.html", {}, status = 403)
-             
-        if view_func.__name__ == "delete_product_images":
-            if not is_allowed(request,request.session.get("user_id"), "edit_product") :
-                 return render(request, "403.html", {}, status = 403)
+ 
+        

@@ -2,10 +2,16 @@
 {%load i18n users_extras%}
 {%block content%}
 
-	{%user_allowed "edit_client" as allow_edit_client%}
-	{%user_allowed "delete_client" as allow_delete_client%}
-	{%user_allowed "create_client" as allow_create_client%}
-	{%user_allowed "read_client" as allow_show_client%}
+{%user_allowed "edit_client" as allow_edit_client%}
+{%user_allowed "delete_client" as allow_delete_client%}
+{%user_allowed "create_client" as allow_create_client%}
+{%user_allowed "read_client" as allow_show_client%}
+
+{%user_allowed "edit_order" as allow_edit_order%}
+{%user_allowed "delete_order" as allow_delete_order%}
+{%user_allowed "create_order" as allow_create_order%}
+{%user_allowed "read_order" as allow_show_order%}
+
 
 
 
@@ -79,15 +85,16 @@
 											</a>
 
 											<a class="" href="/admin/order/edit/{{o.id}}" class="m-1">
-												<button	{%if not allow_edit_client%} disabled {%endif%}
-													class="btn flat btn-info m-1">
+												<button	{%if not allow_edit_order%} disabled {%endif%}
+														
+														class="btn flat btn-info m-1">
 													<i class="fas fa-edit"></i>
 													{%trans ""%}
 												</button>
 											</a>
 
 											<button data-id="{{o.id}}"
-													{%if not allow_delete_client%} disabled {%endif%}
+													{%if not allow_delete_order %} disabled {%endif%}
 													class="btn  flat btn-danger delete_order m-1 ">
 												<i class="far fa-trash-alt"></i>
 												{%trans ""%}

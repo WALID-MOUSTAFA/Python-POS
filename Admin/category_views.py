@@ -10,7 +10,9 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _, get_language
 from django.db.models import Q
 from django.core.paginator import Paginator
+from .decorators import is_allowed
 
+@is_allowed("read_category")
 def index_category(request):
     per_page = 2
     page= request.GET.get("page", 1)
@@ -48,7 +50,7 @@ def index_category(request):
     return render(request, "categories/all.html",context)
 
 
-
+@is_allowed("create_category")
 def create_category(request):
     context = {"title": "Create category"}
 
@@ -101,7 +103,7 @@ def create_category(request):
             return redirect("/admin/category/")
     
 
-
+@is_allowed("edit_category")
 def edit_category(request, id):
     
     category = Category.objects.get(id = id)
@@ -155,7 +157,7 @@ def edit_category(request, id):
             
         
 
-
+@is_allowed("read_category")
 def detailed_category(request, id):
     context = {}
     
@@ -173,7 +175,7 @@ def detailed_category(request, id):
         return render(request, "categories/detailed_category.html", context)
 
     
-
+@is_allowed("delete_category")
 def delete_category(request, id):
     context = {}
 

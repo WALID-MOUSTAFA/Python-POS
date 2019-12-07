@@ -8,7 +8,9 @@ from django.utils.translation import gettext as _, get_language
 from pprint import pprint
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator
+from .decorators import is_allowed
 
+@is_allowed("read_order")
 def index_order(request):
 
     ctx = {}
@@ -40,7 +42,7 @@ def index_order(request):
 
 ##############################################################################
 
-
+@is_allowed("read_order")
 def get_products_order(request, order_id):
     LANG = get_language()
 
@@ -82,6 +84,7 @@ def get_products_order(request, order_id):
     
 #########################################################################################################################
 
+@is_allowed("create_order")
 def create_order(request, client_id):
     ctx = {}
 
@@ -144,7 +147,7 @@ def create_order(request, client_id):
 
 #########################################################################################################################
 
-
+@is_allowed("edit_order")
 def edit_order(request, order_id):
     ctx = {}
 
@@ -252,7 +255,7 @@ def edit_order(request, order_id):
     
 
 
-
+@is_allowed("delete_order")
 def delete_order(request, order_id):
 
     if request.method == "POST":

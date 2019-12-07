@@ -17,10 +17,10 @@
 
 		 <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {{request.session.username}}
+          {{request.user.username}}
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-			<a class="dropdown-item" href="/admin/{{request.session.user_id}}">{%trans "profile"%}</a>
+			<a class="dropdown-item" href="/admin/{{request.user.id}}">{%trans "profile"%}</a>
 
 			<div class="dropdown-divider"></div>
 		  <a class="dropdown-item" href="/admin/logout">{%trans "logout"%}</a>
